@@ -6,4 +6,9 @@
 #app {
     width: 100%;
 }
+
+.super-center {
+    display: grid;
+    place-items: center;
+}
 </style>

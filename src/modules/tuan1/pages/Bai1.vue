@@ -69,7 +69,7 @@ export default class Bai1 extends Vue {
 .bai1-1 {
     height: 100%;
     width: 100%;
-    background: linear-gradient(180deg, #8bb5ff 0%, #e1fbff 100%);
+    background-image: url('~@/assets/images/bai1/bg.png');
 
     /* background-image: linear-gradient(#0094ff, #8bb5ff, #e1fbff, #ff90ea, #ffdeda); */
     padding: 20px;
