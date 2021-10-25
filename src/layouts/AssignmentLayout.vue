@@ -1,12 +1,17 @@
 <template>
     <div class="main-wrapper">
         <el-container class="as-container">
-            <el-header class="as-header">
+            <div class="navigation">
+                <el-link type="primary" href="/bai1_1">Bai 1.1</el-link>
+                <el-link type="primary" href="/bai1_2">Bai 1.2</el-link>
+                <div class="navigation-trigger" @mouseenter="onMouseEnterNavTrigger">a</div>
+            </div>
+            <!-- <el-header class="as-header">
                 <div>
                     <el-link type="primary" href="/bai1_1">Bai 1.1</el-link>
                     <el-link type="primary" href="/bai1_2">Bai 1.2</el-link>
                 </div>
-            </el-header>
+            </el-header> -->
             <el-main class="as-main">
                 <router-view v-slot="{ Component }">
                     <transition name="fade-transform" mode="out-in">
@@ -42,5 +47,12 @@ export default class AssignmentLayout extends Vue {}
 .as-container {
     height: 100vh;
     width: 100vw;
+}
+
+.navigation{
+    position: absolute;
+    &-trigger{
+        position: absolute;
+    }
 }
 </style>

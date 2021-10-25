@@ -15,7 +15,7 @@
                 <Card2 :card="card"></Card2>
             </el-col>
         </el-row>
-        <Footer-2></Footer-2>
+        <Footer2></Footer2>
     </div>
 </template>
 
