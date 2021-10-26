@@ -1,13 +1,6 @@
 import { concat, forEach } from 'lodash';
-import {
-    createRouter,
-    createWebHistory,
-    NavigationGuardWithThis,
-    RouteRecordRaw,
-} from 'vue-router';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { getRouteFromModules } from './util';
-import VueRouteMiddleware, { GLOBAL_MIDDLEWARE_NAME } from './middleware';
-import AuthMiddleware from './middlewares/authMiddleware';
 
 const routesModules = getRouteFromModules();
 
@@ -23,10 +16,10 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach(
-    VueRouteMiddleware({
-        [GLOBAL_MIDDLEWARE_NAME]: AuthMiddleware,
-    }) as NavigationGuardWithThis<unknown>,
-);
+// router.beforeEach(
+//     VueRouteMiddleware({
+//         [GLOBAL_MIDDLEWARE_NAME]: AuthMiddleware,
+//     }) as NavigationGuardWithThis<unknown>,
+// );
 
 export default router;

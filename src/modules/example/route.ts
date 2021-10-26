@@ -5,7 +5,7 @@ import MainLayout from '@/layouts/MainLayout.vue';
 
 export default [
     {
-        path: '/ex',
+        path: '/',
         component: MainLayout,
         meta: {
             public: true,
