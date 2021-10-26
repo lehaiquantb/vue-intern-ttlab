@@ -4,7 +4,10 @@
             <div class="navigation">
                 <el-link type="primary" href="/bai1_1">Bai 1.1</el-link>
                 <el-link type="primary" href="/bai1_2">Bai 1.2</el-link>
-                <div class="navigation-trigger" @mouseenter="onMouseEnterNavTrigger">a</div>
+                <div
+                    class="navigation-trigger"
+                    @mouseenter="onMouseEnterNavTrigger"
+                ></div>
             </div>
             <!-- <el-header class="as-header">
                 <div>
@@ -24,7 +27,6 @@
 </template>
 
 <script lang="ts">
-import { appModule } from '@/store/app';
 import { Options, Vue } from 'vue-class-component';
 
 @Options({})
@@ -40,7 +42,7 @@ export default class AssignmentLayout extends Vue {}
 .as-main {
     padding: 0px;
     width: 100vw;
-    height: calc(100vh - 30px);
+    /* height: calc(100vh - 30px); */
 }
 
 .main-wrapper,
@@ -49,9 +51,9 @@ export default class AssignmentLayout extends Vue {}
     width: 100vw;
 }
 
-.navigation{
+.navigation {
     position: absolute;
-    &-trigger{
+    &-trigger {
         position: absolute;
     }
 }

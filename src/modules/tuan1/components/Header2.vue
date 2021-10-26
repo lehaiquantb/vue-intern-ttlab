@@ -12,7 +12,7 @@
                         display: flex;
                         align-items: center;
                         width: fit-content;
-                        min-height: 36px;
+                        height: 36px;
                         margin-left: 10px;
                     "
                 >
@@ -36,7 +36,7 @@
                         display: flex;
                         align-items: center;
                         width: fit-content;
-                        min-height: 36px;
+                        height: 36px;
                         margin-left: 10px;
                     "
                 >
@@ -60,7 +60,7 @@
                         display: flex;
                         align-items: center;
                         width: fit-content;
-                        min-height: 36px;
+                        height: 36px;
                         margin-left: 10px;
                     "
                 >
@@ -75,16 +75,20 @@
                 </el-dropdown>
             </el-col>
 
-            <el-col class="header2-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+            <el-col class="header2-col" :xs="24" :sm="24" :md="12" :lg="10" :xl="10">
+                <div class="action-item">Show all</div>
+                <div class="action-item action-item-active">Buy now</div>
+                <div class="action-item">Action</div>
             </el-col>
-            <el-col
-                class="header2-col"
-                :xs="24"
-                :sm="24"
-                :md="12"
-                :lg="12"
-                :xl="12"
-            ></el-col>
+
+            <el-col class="header2-col" :xs="24" :sm="24" :md="12" :lg="2" :xl="2">
+                <div class="action-item">
+                    <img :src="require('@/assets/images/bai2/Vector-3.svg')" />
+                </div>
+                <div class="action-item action-item-active">
+                    <img :src="require('@/assets/images/bai2/Vector-4.svg')" />
+                </div>
+            </el-col>
         </el-row>
         <div class="header2-filter">
             <div class="header2-filter-item header2-filter-item-active">Related</div>
@@ -150,6 +154,7 @@ export default class Header2 extends Vue {}
 
 .header2-col {
     display: flex !important;
+    padding: 10px;
 }
 
 .header2-filter {
@@ -177,10 +182,38 @@ export default class Header2 extends Vue {}
         /* Gray / 70 */
 
         color: #4a4b57;
+        margin: 10px;
     }
     .header2-filter-item-active {
         background: #fff !important;
         color: #19191d !important;
     }
+}
+
+.action-item {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 143%;
+    /* or 20px */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.018em;
+    color: #5a5b6a;
+    padding: 0 10px;
+    height: 36px;
+    /* Blue / 5 */
+
+    background: #ebf2ff;
+    border-radius: 4px;
+}
+
+.action-item-active {
+    color: #2264d1;
+    background-color: #fff;
+    box-shadow: 0px 1px 2px rgba(27, 78, 163, 0.24), 0px 2px 4px rgba(41, 121, 255, 0.24);
 }
 </style>

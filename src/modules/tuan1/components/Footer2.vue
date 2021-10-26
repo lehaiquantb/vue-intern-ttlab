@@ -45,7 +45,9 @@ export default class Footer2 extends Vue {}
 
 <style lang="scss" scoped>
 .footer2 {
+    margin-top: 30px;
     &_item_wrapper {
+        min-height: 136px;
         background: #ededf0;
         border-radius: 8px;
         padding: 20px;
