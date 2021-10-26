@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.325849b733a99bd89af36a979edcc71d.js"
+  "/precache-manifest.60f173c683ecab4fdda892c028d3e838.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "base-project"});
+workbox.core.setCacheNameDetails({prefix: "vue-intern-ttlab"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
