@@ -2,7 +2,7 @@
 .history
 .husky/_
 node_modules
-/dist
+#/dist
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
