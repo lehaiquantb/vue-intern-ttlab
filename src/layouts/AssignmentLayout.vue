@@ -1,14 +1,6 @@
 <template>
     <div class="main-wrapper">
         <el-container class="as-container">
-            <div class="navigation">
-                <el-link type="primary" href="/bai1_1">Bai 1.1</el-link>
-                <el-link type="primary" href="/bai1_2">Bai 1.2</el-link>
-                <div
-                    class="navigation-trigger"
-                    @mouseenter="onMouseEnterNavTrigger"
-                ></div>
-            </div>
             <!-- <el-header class="as-header">
                 <div>
                     <el-link type="primary" href="/bai1_1">Bai 1.1</el-link>

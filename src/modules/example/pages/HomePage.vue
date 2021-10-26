@@ -82,6 +82,22 @@
                         </div>
                         <!--end col-->
                     </div>
+                    <div>
+                        <!-- <el-tree
+                            :data="data"
+                            :props="defaultProps"
+                            @node-click="handleNodeClick"
+                        /> -->
+                        <div>
+                            <router-link to="/bai1_1">Bài 1.1</router-link>
+                        </div>
+                        <div>
+                            <router-link to="/bai1_2">Bài 1.2</router-link>
+                        </div>
+                        <div>
+                            <router-link to="/bai2">Bài 2</router-link>
+                        </div>
+                    </div>
                     <!--end row-->
                 </div>
                 <!--end page-title-box-->
@@ -98,6 +114,38 @@ import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 @Options({
     components: {
         HelloWorld,
+    },
+    data() {
+        return {
+            data: [
+                {
+                    label: 'Tuần 1',
+                    children: [
+                        {
+                            label: 'Bài 1.1',
+                            path: '/bai1_1',
+                        },
+                        {
+                            label: 'Bài 1.2',
+                            path: '/bai1_2',
+                        },
+                    ],
+                },
+                {
+                    label: 'Tuần 2',
+                    children: [
+                        {
+                            label: 'Bài 2',
+                            path: '/bai2',
+                        },
+                    ],
+                },
+            ],
+            defaultProps: {
+                children: 'children',
+                label: 'label',
+            },
+        };
     },
 })
 export default class HomePage extends Vue {}
