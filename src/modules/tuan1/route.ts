@@ -5,14 +5,14 @@ import AssignmentLayout from '@/layouts/AssignmentLayout.vue';
 
 export default [
     {
-        path: '/',
+        path: '/tuan1',
         component: AssignmentLayout,
         meta: {
             public: true,
         },
         children: [
             {
-                path: '/bai1_1',
+                path: 'bai1_1',
                 name: 'bai1_1',
                 component: Bai1,
                 meta: {
@@ -21,7 +21,7 @@ export default [
                 },
             },
             {
-                path: '/bai1_2',
+                path: 'bai1_2',
                 name: 'bai1_2',
                 component: Bai2,
                 meta: {
