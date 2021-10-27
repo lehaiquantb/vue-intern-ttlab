@@ -2,77 +2,9 @@
     <div class="header2">
         <el-row :gutter="20">
             <el-col class="header2-col" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                <el-dropdown
-                    class="header-2_dropdown dropdown-title dropdown-active"
-                    style="
-                        border: 1px solid #5a5b6a;
-                        box-sizing: border-box;
-                        border-radius: 4px;
-                        padding: 9px 10px;
-                        display: flex;
-                        align-items: center;
-                        width: fit-content;
-                        height: 36px;
-                        margin-left: 10px;
-                    "
-                >
-                    <span class="header-2_dropdown_title">Useless first</span>
-                    <span class="icon-arrow-down"></span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>Action 1</el-dropdown-item>
-                            <el-dropdown-item>Action 2</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-
-                <el-dropdown
-                    class="header2_dropdown dropdown-title"
-                    style="
-                        border: 1px solid #5a5b6a;
-                        box-sizing: border-box;
-                        border-radius: 4px;
-                        padding: 9px 10px;
-                        display: flex;
-                        align-items: center;
-                        width: fit-content;
-                        height: 36px;
-                        margin-left: 10px;
-                    "
-                >
-                    <span class="header-2_dropdown_title">Condition</span>
-                    <span class="icon-arrow-down"></span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>Action 1</el-dropdown-item>
-                            <el-dropdown-item>Action 2</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-
-                <el-dropdown
-                    class="header-2_dropdown dropdown-title"
-                    style="
-                        border: 1px solid #5a5b6a;
-                        box-sizing: border-box;
-                        border-radius: 4px;
-                        padding: 9px 10px;
-                        display: flex;
-                        align-items: center;
-                        width: fit-content;
-                        height: 36px;
-                        margin-left: 10px;
-                    "
-                >
-                    <span class="header-2_dropdown_title">Delivery options</span>
-                    <span class="icon-arrow-down"></span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>Action 1</el-dropdown-item>
-                            <el-dropdown-item>Action 2</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                <dropdown :title="'Useless first'" :actions="['a', 'b']"></dropdown>
+                <dropdown :title="'Condition'" :disabled="true"></dropdown>
+                <dropdown :title="'Delivery options'" :disabled="true"></dropdown>
             </el-col>
 
             <el-col class="header2-col" :xs="24" :sm="24" :md="12" :lg="10" :xl="10">
@@ -104,9 +36,9 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-
+import Dropdown from '@/components/Dropdown.vue';
 @Options({
-    components: {},
+    components: { Dropdown },
 })
 export default class Header2 extends Vue {}
 </script>

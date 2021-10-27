@@ -1,29 +1,18 @@
 import { RouteRecordRaw } from 'vue-router';
-import Bai1 from './pages/Bai1.vue';
-import Bai2 from './pages/Bai2.vue';
-import AssignmentLayout from '@/layouts/AssignmentLayout.vue';
-
+import ProductLayout from '@/layouts/ProductLayout.vue';
+import ProductList from './pages/ProductList.vue';
 export default [
     {
-        path: '/tuan1',
-        component: AssignmentLayout,
+        path: '/tuan2',
+        component: ProductLayout,
         meta: {
             public: true,
         },
         children: [
             {
-                path: 'bai1_1',
-                name: 'bai1_1',
-                component: Bai1,
-                meta: {
-                    onlyWhenLoggedOut: true,
-                    public: true,
-                },
-            },
-            {
-                path: 'bai1_2',
-                name: 'bai1_2',
-                component: Bai2,
+                path: 'product-list',
+                name: 'product-list',
+                component: ProductList,
                 meta: {
                     onlyWhenLoggedOut: true,
                     public: true,
