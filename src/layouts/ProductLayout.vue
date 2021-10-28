@@ -2,7 +2,7 @@
     <div class="main-wrapper">
         <el-container class="as-container">
             <el-header class="as-header">
-                <header></header>
+                <Header></Header>
             </el-header>
             <el-main class="as-main">
                 <router-view v-slot="{ Component }">
