@@ -1,0 +1,15 @@
+.product-detail {
+    .el-input-number {
+        // height: 50px;
+        width: 70px;
+    }
+
+    .el-input-number__increase,
+    .el-input-number__decrease {
+        width: 15px;
+    }
+
+    .el-input__inner{
+        width: 10px;
+    }
+}

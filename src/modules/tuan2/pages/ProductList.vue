@@ -4,7 +4,7 @@
             <img class="img-fluid" src="@/assets/images/bai2/banner.png" />
         </div>
         <div class="product-list__links">
-            <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb separator-class="el-icon-arrow-right fs-6">
                 <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
                 <el-breadcrumb-item>promotion management</el-breadcrumb-item>
                 <el-breadcrumb-item>promotion list</el-breadcrumb-item>

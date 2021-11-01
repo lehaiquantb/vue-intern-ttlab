@@ -17,4 +17,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.rt-custom-color {
+    color: #0156ff;
+}
+
+.rt-custom-text-deco {
+    text-decoration: underline;
+}
 </style>
