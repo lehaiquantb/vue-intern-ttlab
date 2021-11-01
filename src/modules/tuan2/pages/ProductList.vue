@@ -1,6 +1,9 @@
 <template>
     <div class="product-list">
-        <div>
+        <div class="product-list__banner">
+            <img class="img-fluid" src="@/assets/images/bai2/banner.png" />
+        </div>
+        <div class="product-list__links">
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
                 <el-breadcrumb-item>promotion management</el-breadcrumb-item>
@@ -189,6 +192,12 @@ export default class ProductList extends Vue {
 
 <style lang="scss">
 .product-list {
+    &__banner {
+    }
+
+    &__links {
+        margin-top: 10px;
+    }
     .pl-count {
         font-family: Poppins;
         font-style: normal;

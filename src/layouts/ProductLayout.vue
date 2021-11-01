@@ -1,10 +1,11 @@
 <template>
     <div class="main-wrapper">
-        <el-container class="as-container">
-            <el-header class="as-header">
+        <el-container class="pl-container">
+            <div></div>
+            <el-header class="pl-header">
                 <Header></Header>
             </el-header>
-            <el-main class="as-main">
+            <el-main class="pl-main">
                 <router-view v-slot="{ Component }">
                     <transition name="fade-transform" mode="out-in">
                         <component :is="Component" />
@@ -27,19 +28,19 @@ export default class ProductLayout extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-.as-header {
-    border-bottom: 1px solid #000;
-    height: 30px;
+.pl-header {
+    padding: 0px;
+    height: fit-content !important;
 }
 
-.as-main {
+.pl-main {
     padding: 0px;
     width: 100vw;
     /* height: calc(100vh - 30px); */
 }
 
 .main-wrapper,
-.as-container {
+.pl-container {
     height: 100vh;
     width: 100vw;
 }
