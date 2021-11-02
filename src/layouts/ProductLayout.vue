@@ -34,7 +34,7 @@ export default class ProductLayout extends Vue {}
 }
 
 .pl-main {
-    padding: 0px;
+    padding: 0px 20px;
     width: 100vw;
     /* height: calc(100vh - 30px); */
 }

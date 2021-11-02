@@ -4,15 +4,39 @@
             <el-row>
                 <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <div class="product-detail-header-col">
-                        <div class="product-detail-header-tab">About Product</div>
                         <div
-                            class="
-                                product-detail-header-tab product-detail-header-tab-active
-                            "
+                            class="product-detail-header-tab"
+                            :class="{
+                                'product-detail-header-tab-active':
+                                    $route.name === 'about-product-detail',
+                            }"
                         >
-                            Details
+                            <router-link :to="{ name: 'about-product-detail' }"
+                                >About Product</router-link
+                            >
                         </div>
-                        <div class="product-detail-header-tab">Specs</div>
+                        <div
+                            class="product-detail-header-tab"
+                            :class="{
+                                'product-detail-header-tab-active':
+                                    $route.name === 'detail-product-detail',
+                            }"
+                        >
+                            <router-link :to="{ name: 'detail-product-detail' }"
+                                >Details</router-link
+                            >
+                        </div>
+                        <div
+                            class="product-detail-header-tab"
+                            :class="{
+                                'product-detail-header-tab-active':
+                                    $route.name === 'specs-product-detail',
+                            }"
+                        >
+                            <router-link :to="{ name: 'specs-product-detail' }"
+                                >Specs</router-link
+                            >
+                        </div>
                     </div>
                 </el-col>
                 <el-col
@@ -59,11 +83,16 @@
                                 <el-breadcrumb-item>MSI ALien warer</el-breadcrumb-item>
                             </el-breadcrumb>
                         </div>
+
                         <div class="product-detail-content__left__header">
                             <h2>{{ product.name }}</h2>
+
                             <router-link to="#" class="rt-custom-color"
                                 >Be the first to review this product</router-link
                             >
+                        </div>
+                        <div class="product-detail-content__left__content">
+                            <router-view></router-view>
                         </div>
                         <div class="product-detail-content__left__footer">
                             <div>
@@ -89,6 +118,43 @@
                             <img src="@/assets/images/bai2/chart-icon.svg" />
                             <img src="@/assets/images/bai2/heart-icon.svg" />
                         </div>
+                        <div class="product-detail-content__right__img">
+                            <el-carousel indicator-position="outside">
+                                <el-carousel-item
+                                    v-for="(img, index) in product.imageList"
+                                    :key="index"
+                                >
+                                    <div
+                                        class="
+                                            product-detail-content__right__img__wrapper
+                                            super-center
+                                        "
+                                    >
+                                        <img
+                                            class="img-fluid"
+                                            :src="
+                                                require(`@/assets/images/bai2/${img.url}`)
+                                            "
+                                            alt=""
+                                        />
+                                    </div>
+                                </el-carousel-item>
+                            </el-carousel>
+                            <div class="product-detail-content__right__img__info">
+                                <span>
+                                    <img src="@/assets/images/bai2/img-info.png" />
+                                </span>
+                                <span
+                                    class="
+                                        product-detail-content__right__img__info__divide
+                                    "
+                                ></span>
+                                <span
+                                    >own it now, up to 6 months interest free learn
+                                    more</span
+                                >
+                            </div>
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -106,6 +172,7 @@ export default class ProductDetail extends Vue {
     quantitySale = 1;
 
     product = {
+        id: '1',
         name: 'MSI MPG Trident 3',
         thumbnail: 'p1.png',
         code: 'SKU D5515AI',
@@ -117,6 +184,24 @@ export default class ProductDetail extends Vue {
             ioPort: null,
             GPU: 'a',
         },
+        imageList: [
+            {
+                url: 'p1.png',
+                type: 'png',
+            },
+            {
+                url: 'p2.png',
+                type: 'png',
+            },
+            {
+                url: 'p3.png',
+                type: 'png',
+            },
+            {
+                url: 'p4.png',
+                type: 'png',
+            },
+        ],
         price: '499',
         rate: 4,
     };
@@ -182,7 +267,7 @@ export default class ProductDetail extends Vue {
 
 .product-detail-content {
     &__left {
-        padding: 20px;
+        /* padding: 20px; */
         &__header {
         }
 
@@ -207,14 +292,26 @@ export default class ProductDetail extends Vue {
     }
     &__right {
         padding: 20px;
+        display: flex;
+        width: 100%;
         &__action {
+            img {
+                height: 30px;
+                width: 30px;
+                margin: 5px;
+            }
             display: flex;
             flex-direction: column;
         }
-        img {
-            height: 30px;
-            width: 30px;
-            margin: 5px;
+        &__img {
+            width: calc(100% - 30px);
+            span {
+                margin: 5px;
+            }
+        }
+
+        &__img__info__divide {
+            border: 2px solid #00aeb8;
         }
     }
 }
