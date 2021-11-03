@@ -8,10 +8,10 @@
             @input="$emit('update:modelValue', parseFloat($event.target.value))"
         />
         <div class="input-number-custom__icon">
-            <div class="super-center" @click="$emit('update:modelValue', value + 1)">
+            <div class="super-center" @click="increaseValue">
                 <img src="@/assets/images/bai2/arrow-up-icon.svg" />
             </div>
-            <div class="super-center" @click="$emit('update:modelValue', value - 1)">
+            <div class="super-center" @click="decreaseValue">
                 <img
                     src="@/assets/images/bai2/arrow-up-icon.svg"
                     class="input-number-custom__icon__down"
@@ -32,8 +32,20 @@ import { Options, Vue } from 'vue-class-component';
     },
 })
 export default class InputNumber extends Vue {
+    min!: number;
+    max!: number;
     value!: number;
-    // valueInput = this.value;
+    increaseValue() {
+        if (this.value < this.max) {
+            this.$emit('update:modelValue', this.value + 1);
+        }
+    }
+
+    decreaseValue() {
+        if (this.value > this.min) {
+            this.$emit('update:modelValue', this.value - 1);
+        }
+    }
 }
 </script>
 

@@ -1,0 +1,95 @@
+.collapse-custom {
+    &__item {
+        display: flex;
+        justify-content: space-between;
+    }
+    background-color: #f5f7ff !important;
+    .el-collapse {
+        border: none;
+    }
+
+    .el-collapse-item.is-active {
+        .icon-arrow-up {
+            transform: rotate(0deg);
+        }
+    }
+
+    .el-collapse-item__arrow {
+        display: none !important;
+    }
+    .el-collapse-item__header {
+        flex-direction: column;
+        background-color: #f5f7ff;
+        border: none;
+        display: flex;
+        justify-content: center;
+    }
+    .collapse-custom__extra__title {
+        width: 100%;
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+
+        /* Color - 10 */
+        padding: 10px 0px;
+        color: #666666;
+    }
+    .collapse-custom__title {
+        background-color: #f5f7ff;
+        font-family: Poppins;
+        font-style: normal;
+        // font-weight: 600;
+        font-weight: normal;
+        // font-size: 14px;
+        font-size: 18px;
+
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        border: none;
+        color: #000000;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .el-collapse-item__content {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 210%;
+        /* or 27px */
+
+        display: flex;
+        align-items: center;
+        color: #000000;
+        background-color: #f5f7ff;
+        flex-direction: column;
+        padding: 0px;
+    }
+
+    .el-collapse-item__wrap {
+        border: none;
+    }
+
+    .icon-arrow-up {
+        transform: rotate(180deg);
+        display: inline-block;
+        /* content: ' '; */
+        background-size: 10px 5px;
+        height: 5px;
+        width: 10px;
+        color: #787885;
+        margin-left: 5px;
+        background-image: url('~@/assets/images/arrow-up.svg');
+    }
+
+    .pf-wrapper__item-color {
+        display: flex;
+    }
+}

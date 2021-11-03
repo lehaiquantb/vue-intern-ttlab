@@ -70,8 +70,15 @@
                 :md="2"
                 :lg="2"
                 :xl="2"
-                class="shopping-cart-item__col"
-            ></el-col>
+                class="shopping-cart-item__col shopping-cart-item__action"
+            >
+                <div>
+                    <img src="@/assets/images/bai2/btn-delete-icon.svg" />
+                </div>
+                <div>
+                    <img src="@/assets/images/bai2/btn-edit-icon.svg" />
+                </div>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -133,6 +140,7 @@ export default class ShoppingCartItem extends Vue {
 <style lang="scss" scoped>
 .shopping-cart-item {
     padding: 32px 0px;
+    border-bottom: 1px solid #cacdd8;
     &__col {
         font-family: Poppins;
         font-style: normal;
@@ -157,6 +165,15 @@ export default class ShoppingCartItem extends Vue {
         color: #000000;
         p {
             padding-left: 5px;
+        }
+    }
+
+    &__action {
+        flex-direction: column;
+        align-items: flex-end;
+        div {
+            cursor: pointer;
+            margin: 5px;
         }
     }
 }

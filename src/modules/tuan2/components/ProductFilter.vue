@@ -64,15 +64,16 @@
             </el-collapse>
         </div>
         <div>
-            <div class="pf__btn__apply">Apply Filters (2)</div>
+            <custom-button type="primary" width="100%">Apply Filters (2)</custom-button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import CustomButton from '@/components/CustomButton.vue';
 @Options({
-    components: {},
+    components: { CustomButton },
     props: {
         productFilter: {
             type: Object,
@@ -220,26 +221,6 @@ export default class ProductFilter extends Vue {
 
     .pf-wrapper__item-color {
         display: flex;
-    }
-
-    .pf__btn__apply {
-        background: #0156ff;
-        border-radius: 50px;
-        font-family: Poppins;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 21px;
-        height: 37px;
-
-        /* identical to box height */
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        cursor: pointer;
-        color: #ffffff;
     }
 }
 </style>

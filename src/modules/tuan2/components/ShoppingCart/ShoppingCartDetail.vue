@@ -65,14 +65,40 @@
             :key="index"
             :cartItem="item"
         ></shopping-cart-item>
+        <div class="shopping-cart-detail__action">
+            <el-row>
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :md="11"
+                    :lg="11"
+                    :xl="11"
+                    class="shopping-cart-detail__col shopping-cart-detail__action__left"
+                >
+                    <custom-button type="fourth">Continue Shopping</custom-button>
+                    <custom-button type="third">Clear Shopping Cart</custom-button>
+                </el-col>
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :md="13"
+                    :lg="13"
+                    :xl="13"
+                    class="shopping-cart-detail__col shopping-cart-detail__action__right"
+                >
+                    <custom-button type="third">Update Shopping Cart</custom-button>
+                </el-col></el-row
+            >
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import ShoppingCartItem from './ShoppingCartItem.vue';
+import CustomButton from '@/components/CustomButton.vue';
 @Options({
-    components: { ShoppingCartItem },
+    components: { ShoppingCartItem, CustomButton },
 })
 export default class ShoppingCartDetail extends Vue {
     cartList = [
@@ -120,9 +146,14 @@ export default class ShoppingCartDetail extends Vue {
 <style lang="scss" scoped>
 .shopping-cart-detail {
     &__col {
+        & > div {
+            margin: 5px;
+        }
         padding: 0 5px;
     }
     &__header {
+        padding: 10px 0px;
+        border-bottom: 1px solid #cacdd8;
         font-family: Poppins;
         font-style: normal;
         font-weight: 600;
@@ -130,6 +161,17 @@ export default class ShoppingCartDetail extends Vue {
         line-height: 24px;
 
         color: #000000;
+    }
+
+    &__action {
+        margin-top: 20px;
+        &__left {
+            display: flex;
+        }
+        &__right {
+            justify-content: flex-end;
+            display: flex;
+        }
     }
 }
 </style>
