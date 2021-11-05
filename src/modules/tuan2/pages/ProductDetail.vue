@@ -8,10 +8,10 @@
                             class="product-detail-header-tab"
                             :class="{
                                 'product-detail-header-tab-active':
-                                    $route.name === 'about-product-detail',
+                                    $route.name === 'About',
                             }"
                         >
-                            <router-link :to="{ name: 'about-product-detail' }"
+                            <router-link :to="{ name: 'About' }"
                                 >About Product</router-link
                             >
                         </div>
@@ -19,23 +19,19 @@
                             class="product-detail-header-tab"
                             :class="{
                                 'product-detail-header-tab-active':
-                                    $route.name === 'detail-product-detail',
+                                    $route.name === 'Detail',
                             }"
                         >
-                            <router-link :to="{ name: 'detail-product-detail' }"
-                                >Details</router-link
-                            >
+                            <router-link :to="{ name: 'Detail' }">Details</router-link>
                         </div>
                         <div
                             class="product-detail-header-tab"
                             :class="{
                                 'product-detail-header-tab-active':
-                                    $route.name === 'specs-product-detail',
+                                    $route.name === 'Specs',
                             }"
                         >
-                            <router-link :to="{ name: 'specs-product-detail' }"
-                                >Specs</router-link
-                            >
+                            <router-link :to="{ name: 'Specs' }">Specs</router-link>
                         </div>
                     </div>
                 </el-col>

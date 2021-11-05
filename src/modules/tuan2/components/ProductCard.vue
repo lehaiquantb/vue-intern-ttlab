@@ -1,5 +1,5 @@
 <template>
-    <div class="product_card">
+    <div class="product_card" @click="navigateProductDetail">
         <el-row :gutter="10">
             <div class="product_card-stock-status">
                 <img src="@/assets/images/bai2/tick-success-icon.svg" />
@@ -90,20 +90,28 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { IProduct } from '../types';
 
 @Options({
     components: {},
     props: {
-        product: {
-            type: Object,
-        },
+        product: {},
     },
 })
-export default class ProductCard extends Vue {}
+export default class ProductCard extends Vue {
+    product!: IProduct;
+    navigateProductDetail() {
+        this.$router.push({ name: 'ProductDetail', params: { id: this.product.id } });
+    }
+}
 </script>
 
 <style lang="scss">
 .product_card {
+    cursor: pointer;
+    &:hover {
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.14);
+    }
     padding: 20px;
     & > div {
         /* height: 330px; */

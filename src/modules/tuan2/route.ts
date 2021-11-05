@@ -10,13 +10,14 @@ export default [
     {
         path: '/tuan2',
         component: ProductLayout,
+        name: 'ProductLayout',
         meta: {
             public: true,
         },
         children: [
             {
                 path: 'product-list',
-                name: 'product-list',
+                name: 'ProductList',
                 component: ProductList,
                 meta: {
                     onlyWhenLoggedOut: true,
@@ -25,16 +26,17 @@ export default [
             },
             {
                 path: 'product-detail/:id',
-                name: 'product-detail/:id',
+                name: 'ProductDetail',
                 component: ProductDetail,
                 meta: {
                     onlyWhenLoggedOut: true,
                     public: true,
                 },
+                redirect: { name: 'About' },
                 children: [
                     {
                         path: 'about-product',
-                        name: 'about-product-detail',
+                        name: 'About',
                         component: About,
                         meta: {
                             onlyWhenLoggedOut: true,
@@ -43,7 +45,7 @@ export default [
                     },
                     {
                         path: 'detail',
-                        name: 'detail-product-detail',
+                        name: 'Detail',
                         component: Detail,
                         meta: {
                             onlyWhenLoggedOut: true,
@@ -52,7 +54,7 @@ export default [
                     },
                     {
                         path: 'specs',
-                        name: 'specs-product-detail',
+                        name: 'Specs',
                         component: Specs,
                         meta: {
                             onlyWhenLoggedOut: true,
@@ -63,7 +65,7 @@ export default [
             },
             {
                 path: 'shopping-cart',
-                name: 'shopping-cart',
+                name: 'ShoppingCart',
                 component: ShoppingCart,
                 meta: {
                     onlyWhenLoggedOut: true,

@@ -17,7 +17,7 @@
         <div>
             <el-row :gutter="10" style="margin: 0px">
                 <el-col class="col1" :xs="24" :sm="8" :md="8" :lg="4" :xl="4">
-                    <product-filter :productFilter="productFilter"></product-filter>
+                    <product-filter></product-filter>
                 </el-col>
                 <el-col class="col1" :xs="24" :sm="16" :md="16" :lg="20" :xl="20">
                     <el-row :gutter="10">
@@ -72,7 +72,7 @@
                             :md="24"
                             :lg="24"
                             :xl="24"
-                            v-for="(product, index) in productList"
+                            v-for="(product, index) in productListShow"
                             :key="index"
                         >
                             <product-card :product="product"></product-card>
@@ -90,102 +90,14 @@ import ProductCard from '@/modules/tuan2/components/ProductCard.vue';
 import ProductFilter from '@/modules/tuan2/components/ProductFilter.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import FilterTag from '@/components/FilterTag.vue';
+import { productModule } from '../store';
+import { IProduct } from '../types';
 @Options({
     components: { ProductCard, ProductFilter, Dropdown, FilterTag },
 })
 export default class ProductList extends Vue {
-    _productList = [
-        {
-            thumbnail: 'p1.png',
-            code: 'SKU D5515AI',
-            description:
-                'MSI CREATOR 17 A10SFS-240AU 17 UHD 4K HDR Thin Bezel Intel 10th Gen i7 10875H - RTX 2070 SUPER MAX Q - 16GB RAM - 1TB SSD NVME - Windows 10 PRO Laptop',
-            detail: {
-                cpu: null,
-                featured: null,
-                ioPort: null,
-                GPU: 'a',
-            },
-            price: '499',
-
-            rate: 4,
-        },
-    ];
-
-    _category = [
-        {
-            id: 1,
-            name: 'CUSTOM PCS',
-            quantity: 10,
-        },
-        {
-            id: 2,
-            name: 'MSI ALL-IN-ONE PCS',
-            quantity: 10,
-        },
-        {
-            id: 3,
-            name: 'HP/COMPAQ PCS',
-            quantity: 10,
-        },
-    ];
-
-    get productList() {
-        return this._productList;
-    }
-
-    set productList(p) {
-        this._productList = p;
-    }
-
-    get productFilter() {
-        const pF = [
-            {
-                from: 0,
-                to: 1000,
-                quantity: 19,
-                active: false,
-            },
-            {
-                from: 1000,
-                to: 2000,
-                quantity: 21,
-                active: false,
-            },
-        ];
-        return {
-            color: [
-                {
-                    color: 'blue',
-                    active: false,
-                },
-                {
-                    color: 'red',
-                    active: true,
-                },
-            ],
-            price: pF,
-            category: [
-                {
-                    id: 1,
-                    name: 'CUSTOM PCS',
-                    quantity: 10,
-                    active: false,
-                },
-                {
-                    id: 2,
-                    name: 'MSI ALL-IN-ONE PCS',
-                    quantity: 10,
-                    active: false,
-                },
-                {
-                    id: 3,
-                    name: 'HP/COMPAQ PCS',
-                    quantity: 10,
-                    active: false,
-                },
-            ],
-        };
+    get productListShow(): Array<IProduct> {
+        return productModule.productListShow;
     }
 }
 </script>

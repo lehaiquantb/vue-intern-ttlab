@@ -2,9 +2,9 @@
     <div class="main-wrapper">
         <el-container class="pl-container">
             <div></div>
-            <!-- <el-header class="pl-header">
+            <el-header class="pl-header">
                 <Header></Header>
-            </el-header> -->
+            </el-header>
             <el-main class="pl-main">
                 <router-view v-slot="{ Component }">
                     <transition name="fade-transform" mode="out-in">
