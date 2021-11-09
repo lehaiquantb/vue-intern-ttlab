@@ -2,7 +2,13 @@
     <div class="product-filter">
         <div>
             <div class="product-filter__title">Filters</div>
-            <div class="product-filter__btn-clear">Clear Filter</div>
+            <div
+                class="product-filter__btn-clear"
+                :data-avaiable="countApply > 0"
+                @click="onClearApplyFilter"
+            >
+                Clear Filter
+            </div>
         </div>
         <div class="pf-cate-price-color pf-wrapper">
             <el-collapse v-model="showFilters">
@@ -138,6 +144,11 @@ export default class ProductFilter extends Vue {
         productModule.updateProductListShow();
         this.countApply = 0;
     }
+
+    onClearApplyFilter() {
+        this.countApply = 0;
+        productModule.clearApplyFilter();
+    }
 }
 </script>
 
@@ -168,6 +179,11 @@ export default class ProductFilter extends Vue {
     }
 
     &__btn-clear {
+        &[data-avaiable='true'] {
+            border: 2px solid #000;
+            color: #000;
+        }
+        cursor: pointer;
         border: 2px solid #a2a6b0;
         box-sizing: border-box;
         border-radius: 50px;

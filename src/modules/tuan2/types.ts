@@ -56,3 +56,10 @@ export interface IFilter {
     category: Array<IFilterCategory>;
     [index: string]: Array<IFilterColor | IFilterCategory | IFilterPrice>;
 }
+
+export interface IPagination {
+    pageSize: number;
+    defaultPageSize: number;
+    total: number;
+    currentPage: number;
+}

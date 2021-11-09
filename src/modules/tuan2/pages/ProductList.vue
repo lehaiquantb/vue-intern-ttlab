@@ -22,7 +22,7 @@
                 <el-col class="col1" :xs="24" :sm="16" :md="16" :lg="20" :xl="20">
                     <el-row :gutter="10">
                         <el-col class="col1" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <div class="pl-count">Items 1-35 of 61</div>
+                            <div class="pl-count">{{ showTextPagination() }}</div>
                         </el-col>
 
                         <el-col class="col1" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -123,6 +123,18 @@ export default class ProductList extends Vue {
 
     get pagination() {
         return productModule.pagination;
+    }
+
+    showTextPagination(): string {
+        const from = this.pagination.pageSize * (this.pagination.currentPage - 1) + 1;
+        const to = from - 1 + this.pagination.pageSize;
+        return `Items ${this.pagination.total === 0 ? 0 : from}-${
+            to > this.pagination.total ? this.pagination.total : to
+        } of ${this.pagination.total}`;
+    }
+
+    created() {
+        productModule.updateProductListShow();
     }
 
     changePageSize(pageSize: number) {

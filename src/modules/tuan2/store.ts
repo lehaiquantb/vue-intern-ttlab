@@ -1,4 +1,4 @@
-import { ICategory, IProduct, IFilter } from './types';
+import { ICategory, IProduct, IFilter, IPagination } from './types';
 import { getModule, VuexModule, Mutation, Module, Action } from 'vuex-module-decorators';
 import store from '@/store';
 
@@ -359,19 +359,14 @@ class ProductModule extends VuexModule {
         ],
     };
 
-    pagination = {
-        pageSize: 10,
+    pagination: IPagination = {
+        pageSize: 2,
         defaultPageSize: 10,
-        total: 99,
+        total: this.productList.length,
         currentPage: 1,
     };
 
     productListShow: Array<IProduct> = this.productList;
-
-    @Mutation
-    updatePagination(changeObject: any) {
-        this.pagination = { ...this.pagination, ...changeObject };
-    }
 
     @Mutation
     updateFilterCategory(changeObject: any) {
@@ -408,6 +403,22 @@ class ProductModule extends VuexModule {
     }
 
     @Mutation
+    clearApplyFilter() {
+        for (const key in this.filter) {
+            this.filter[key].forEach((item) => {
+                if (item.status === 'pre-active') {
+                    item.status = 'not-active';
+                }
+            });
+        }
+    }
+
+    @Mutation
+    UPDATE_PRODUCT_LIST_SHOW(productListShowTemp: Array<IProduct>) {
+        this.productListShow = productListShowTemp;
+    }
+
+    @Action
     updateProductListShow() {
         let productListShowTemp = this.productList;
         this.filter.category.forEach((item, index) => {
@@ -456,13 +467,28 @@ class ProductModule extends VuexModule {
             return true;
         });
 
-        // search
-
         // paging
-
-        this.productListShow = productListShowTemp;
+        this.UPDATE_PAGINATION({ total: productListShowTemp.length });
+        const offset = (this.pagination.currentPage - 1) * this.pagination.pageSize;
+        productListShowTemp = productListShowTemp.slice(
+            offset,
+            offset + this.pagination.pageSize,
+        );
+        // search
+        this.UPDATE_PRODUCT_LIST_SHOW(productListShowTemp);
     }
 
+    @Mutation
+    UPDATE_PAGINATION(changeObject: any) {
+        this.pagination = { ...this.pagination, ...changeObject };
+        // this.updateProductListShow();
+    }
+
+    @Action
+    updatePagination(changeObject: any) {
+        this.UPDATE_PAGINATION(changeObject);
+        this.updateProductListShow();
+    }
     // @Action
     // incrementAfterTime(payload: number) {}
 
