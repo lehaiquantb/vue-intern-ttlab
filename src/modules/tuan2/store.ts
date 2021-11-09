@@ -1,5 +1,5 @@
-import { ICategory, IProduct, IFilter, IColor } from './types';
-import { getModule, VuexModule, Mutation, Module } from 'vuex-module-decorators';
+import { ICategory, IProduct, IFilter } from './types';
+import { getModule, VuexModule, Mutation, Module, Action } from 'vuex-module-decorators';
 import store from '@/store';
 
 @Module({ dynamic: true, namespaced: true, store, name: 'Product' })
@@ -273,26 +273,68 @@ class ProductModule extends VuexModule {
                 from: 0,
                 to: 1000,
                 quantity: 19,
-                active: false,
+                status: 'not-active',
             },
             {
                 id: 2,
                 from: 1000,
                 to: 2000,
                 quantity: 21,
-                active: false,
+                status: 'not-active',
+            },
+            {
+                id: 3,
+                from: 2000,
+                to: 3000,
+                quantity: 19,
+                status: 'not-active',
+            },
+            {
+                id: 4,
+                from: 3000,
+                to: 4000,
+                quantity: 19,
+                status: 'not-active',
+            },
+            {
+                id: 5,
+                from: 4000,
+                to: 5000,
+                quantity: 19,
+                status: 'not-active',
+            },
+            {
+                id: 6,
+                from: 5000,
+                to: 6000,
+                quantity: 19,
+                status: 'not-active',
+            },
+            {
+                id: 7,
+                from: 6000,
+                to: 7000,
+                quantity: 19,
+                status: 'not-active',
+            },
+            {
+                id: 8,
+                from: 7000,
+                to: Infinity,
+                quantity: 19,
+                status: 'not-active',
             },
         ],
         color: [
             {
                 id: 1,
                 hex: 'blue',
-                active: false,
+                status: 'not-active',
             },
             {
                 id: 2,
                 hex: 'red',
-                active: false,
+                status: 'not-active',
             },
         ],
         category: [
@@ -300,27 +342,33 @@ class ProductModule extends VuexModule {
                 id: 1,
                 name: 'CUSTOM PCS',
                 quantity: 10,
-                active: false,
+                status: 'not-active',
             },
             {
                 id: 2,
                 name: 'MSI ALL-IN-ONE PCS',
                 quantity: 10,
-                active: false,
+                status: 'not-active',
             },
             {
                 id: 3,
                 name: 'HP/COMPAQ PCS',
                 quantity: 10,
-                active: false,
+                status: 'not-active',
             },
         ],
+    };
+
+    pagination = {
+        pageSize: 10,
+        defaultPageSize: 10,
+        total: 99,
     };
 
     productListShow: Array<IProduct> = this.productList;
 
     @Mutation
-    updateFilterCategory(changeObject: ICategory) {
+    updateFilterCategory(changeObject: any) {
         const index = this.filter.category.findIndex(
             (item) => item.id === changeObject?.id,
         );
@@ -328,53 +376,84 @@ class ProductModule extends VuexModule {
     }
 
     @Mutation
-    updateFilterColor(changeObject: IColor) {
+    updateFilterColor(changeObject: any) {
         const index = this.filter.color.findIndex((item) => item.id === changeObject?.id);
         this.filter.color[index] = { ...this.filter.color[index], ...changeObject };
     }
 
     @Mutation
-    updateFilterPrice(changeObject: { id: number }) {
+    UPDATE_FILTER_PRICE(changeObject: any) {
         const index = this.filter.price.findIndex((item) => item.id === changeObject?.id);
         this.filter.price[index] = { ...this.filter.price[index], ...changeObject };
+    }
+
+    @Action
+    updateFilterPrice(changeObject: any) {
+        this.UPDATE_FILTER_PRICE(changeObject);
+    }
+
+    @Mutation
+    clearAllFilter() {
+        for (const key in this.filter) {
+            this.filter[key].forEach((item) => {
+                item.status = 'not-active';
+            });
+        }
     }
 
     @Mutation
     updateProductListShow() {
         let productListShowTemp = this.productList;
+        this.filter.category.forEach((item, index) => {
+            if (item.status === 'pre-active') {
+                item.status = 'active';
+            }
+        });
+        this.filter.color.forEach((item, index) => {
+            if (item.status === 'pre-active') {
+                item.status = 'active';
+            }
+        });
+        this.filter.price.forEach((item, index) => {
+            if (item.status === 'pre-active') {
+                item.status = 'active';
+            }
+        });
         // filter
-        productListShowTemp = productListShowTemp.filter((item) =>
-            this.filter.category.find((c) => c.active && c.id === item.category.id),
-        );
-
-        // for (const categoryFilter of this.filter.category) {
-        //     if (categoryFilter.active) {
-        //         productListShowTemp = productListShowTemp.filter(
-        //             (item) => item.category.id === categoryFilter.id,
-        //         );
-        //     }
-        // }
-
-        for (const priceFilter of this.filter.price) {
-            if (priceFilter.active) {
-                productListShowTemp = productListShowTemp.filter(
-                    (item) =>
-                        priceFilter.from <= item.price && item.price <= priceFilter.to,
-                );
+        productListShowTemp = productListShowTemp.filter((item) => {
+            for (const categoryFilter of this.filter.category) {
+                if (categoryFilter.status === 'active') {
+                    return categoryFilter.id === item.category.id;
+                }
             }
-        }
+            return true;
+        });
 
-        for (const colorFilter of this.filter.color) {
-            if (colorFilter.active) {
-                productListShowTemp = productListShowTemp.filter(
-                    (item) =>
+        productListShowTemp = productListShowTemp.filter((item) => {
+            for (const priceFilter of this.filter.price) {
+                if (priceFilter.status === 'active') {
+                    return priceFilter.from <= item.price && item.price <= priceFilter.to;
+                }
+            }
+            return true;
+        });
+
+        productListShowTemp = productListShowTemp.filter((item) => {
+            for (const colorFilter of this.filter.color) {
+                if (colorFilter.status === 'active') {
+                    return (
                         item.colorList.find((color) => color.hex === colorFilter.hex) !==
-                        undefined,
-                );
+                        undefined
+                    );
+                }
             }
-        }
+            return true;
+        });
+
         // search
+
         // paging
+
         this.productListShow = productListShowTemp;
     }
 

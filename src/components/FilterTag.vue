@@ -1,8 +1,16 @@
 <template>
     <div class="filter-tag">
-        <span class="filter-tag__title text-too-long">{{ title }}</span>
-        <span class="filter-tag__quantity">({{ quantity }})</span>
-        <span class="filter-tag__close">
+        <span class="filter-tag__title text-too-long" v-if="type === 'text'">{{
+            title
+        }}</span>
+        <span
+            class="filter-tag__color"
+            :style="{ backgroundColor: color }"
+            v-if="type === 'color'"
+        ></span>
+
+        <span class="filter-tag__quantity" v-if="type === 'text'">({{ quantity }})</span>
+        <span class="filter-tag__close" @click="$emit('onClose')">
             <img src="@/assets/images/bai2/red-close.svg" />
         </span>
     </div>
@@ -11,10 +19,14 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
+type TypeFilterTag = 'text' | 'color';
+
 @Options({
     props: {
         title: { type: String, default: '' },
         quantity: { type: Number, default: 0 },
+        type: { type: String as () => TypeFilterTag, default: 'text' },
+        color: { type: String },
     },
 })
 export default class FilterTag extends Vue {}
@@ -64,6 +76,12 @@ export default class FilterTag extends Vue {}
     &__close {
         cursor: pointer;
         margin-left: 5px;
+    }
+
+    &__color {
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
     }
 }
 </style>

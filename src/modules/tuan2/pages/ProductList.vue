@@ -56,10 +56,17 @@
                         <el-col class="col1" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             <div class="filter-tag-container">
                                 <filter-tag
-                                    :title="'CUSTOM PCS'"
-                                    :quantity="24"
+                                    v-for="(filterTag, index) in filterTagList"
+                                    :key="index"
+                                    :type="filterTag.type"
+                                    :title="filterTag.title"
+                                    :color="filterTag.color"
+                                    :quantity="filterTag.quantity"
+                                    @on-close="onClose(filterTag)"
                                 ></filter-tag>
-                                <div class="btn-clear-all">Clear all</div>
+                                <div class="btn-clear-all" @click="onClearAllFilter">
+                                    Clear all
+                                </div>
                             </div>
                         </el-col>
                     </el-row>
@@ -91,13 +98,91 @@ import ProductFilter from '@/modules/tuan2/components/ProductFilter.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import FilterTag from '@/components/FilterTag.vue';
 import { productModule } from '../store';
-import { IProduct } from '../types';
+import { IFilterPrice, IProduct } from '../types';
 @Options({
     components: { ProductCard, ProductFilter, Dropdown, FilterTag },
 })
 export default class ProductList extends Vue {
+    $helpers!: Record<string, any>;
     get productListShow(): Array<IProduct> {
         return productModule.productListShow;
+    }
+
+    formatPriceFilter(priceFilter: IFilterPrice): string {
+        if (!isFinite(priceFilter.to)) {
+            return `${this.$helpers.formatMoney(priceFilter.from)} And Above`;
+        }
+        return `${this.$helpers.formatMoney(
+            priceFilter.from,
+        )} - ${this.$helpers.formatMoney(priceFilter.to)}`;
+    }
+
+    get filterTagList(): Array<any> {
+        const tempFilterTagList = [];
+        const tempColorList = productModule.filter.color
+            .filter((item) => item.status === 'active')
+            .map((item) => ({
+                color: item.hex,
+                type: 'color',
+                id: item.id,
+                typeFilter: 'color',
+            }));
+        tempFilterTagList.push(...tempColorList);
+
+        const tempCateList = productModule.filter.category
+            .filter((item) => item.status === 'active')
+            .map((item) => ({
+                title: item.name,
+                quantity: item.quantity,
+                type: 'text',
+                id: item.id,
+                typeFilter: 'category',
+            }));
+        tempFilterTagList.push(...tempCateList);
+
+        const tempPriceList = productModule.filter.price
+            .filter((item) => item.status === 'active')
+            .map((item) => ({
+                id: item.id,
+                title: this.formatPriceFilter(item),
+                quantity: item.quantity,
+                type: 'text',
+                typeFilter: 'price',
+            }));
+        tempFilterTagList.push(...tempPriceList);
+
+        return tempFilterTagList;
+    }
+
+    onClose(filterTag: { id: number | string; typeFilter: string }) {
+        switch (filterTag.typeFilter) {
+            case 'category':
+                productModule.updateFilterCategory({
+                    id: filterTag.id,
+                    status: 'not-active',
+                });
+                break;
+            case 'color':
+                productModule.updateFilterColor({
+                    id: filterTag.id,
+                    status: 'not-active',
+                });
+                break;
+            case 'price':
+                productModule.updateFilterPrice({
+                    id: filterTag.id,
+                    status: 'not-active',
+                });
+                break;
+            default:
+                break;
+        }
+        productModule.updateProductListShow();
+    }
+
+    onClearAllFilter() {
+        productModule.clearAllFilter();
+        productModule.updateProductListShow();
     }
 }
 </script>
@@ -160,7 +245,7 @@ export default class ProductList extends Vue {
         font-size: 13px;
         line-height: 210%;
         /* or 27px */
-
+        cursor: pointer;
         display: flex;
         align-items: center;
 

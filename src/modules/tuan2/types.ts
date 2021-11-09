@@ -32,26 +32,27 @@ export interface IProduct extends IIdentification {
 
 export interface IFilterIndentity {
     id: number | string;
-    active: boolean;
+    status: 'not-active' | 'active' | 'pre-active';
+}
+
+export interface IFilterColor extends IFilterIndentity {
+    hex: string;
+}
+
+export interface IFilterCategory extends IFilterIndentity {
+    name: string;
+    quantity: number;
+}
+
+export interface IFilterPrice extends IFilterIndentity {
+    from: number;
+    to: number;
+    quantity: number;
 }
 
 export interface IFilter {
-    color: Array<{
-        hex: string;
-        id: number | string;
-        active: boolean;
-    }>;
-    price: Array<{
-        id: number | string;
-        from: number;
-        to: number;
-        quantity: number;
-        active: boolean;
-    }>;
-    category: Array<{
-        name: string;
-        id: number | string;
-        active: boolean;
-        quantity: number;
-    }>;
+    color: Array<IFilterColor>;
+    price: Array<IFilterPrice>;
+    category: Array<IFilterCategory>;
+    [index: string]: Array<IFilterColor | IFilterCategory | IFilterPrice>;
 }

@@ -15,7 +15,7 @@
                         class="pf-wrapper__item pf-wrapper__item__category"
                         v-for="(categoryFilter, index) in filter.category"
                         :key="index"
-                        :data-active="categoryFilter.active"
+                        :data-status="categoryFilter.status"
                         @click="handleSelectCategory(categoryFilter)"
                     >
                         <span>{{ categoryFilter.name }}</span>
@@ -32,13 +32,10 @@
                         class="pf-wrapper__item pf-wrapper__item__price"
                         v-for="(priceFilter, index) in filter.price"
                         :key="index"
-                        :data-active="priceFilter.active"
+                        :data-status="priceFilter.status"
                         @click="handleSelectPrice(priceFilter)"
                     >
-                        <span
-                            >{{ $helpers.formatMoney(priceFilter.from) }} -
-                            {{ $helpers.formatMoney(priceFilter.to) }}</span
-                        >
+                        <span>{{ formatPriceFilter(priceFilter) }}</span>
                         <span>{{ priceFilter.quantity }}</span>
                     </div>
                 </el-collapse-item>
@@ -53,9 +50,12 @@
                             v-for="(colorFilter, index) in filter.color"
                             :key="index"
                             class="pf__color-item"
-                            :data-active="colorFilter.active"
+                            :data-status="colorFilter.status"
                             :style="{
-                                border: colorFilter.active ? '2px solid #0156ff' : 'none',
+                                border:
+                                    colorFilter.status === 'pre-active'
+                                        ? '2px solid #0156ff'
+                                        : 'none',
                             }"
                             @click="handleSelectColor(colorFilter)"
                         >
@@ -82,6 +82,7 @@
 import { Options, Vue } from 'vue-class-component';
 import CustomButton from '@/components/CustomButton.vue';
 import { productModule } from '../store';
+import { IFilterCategory, IFilterColor, IFilterPrice } from '../types';
 @Options({
     components: { CustomButton },
     props: {},
@@ -96,30 +97,46 @@ import { productModule } from '../store';
     },
 })
 export default class ProductFilter extends Vue {
+    $helpers!: Record<string, any>;
     get filter() {
         return productModule.filter;
     }
 
+    formatPriceFilter(priceFilter: IFilterPrice): string {
+        if (!isFinite(priceFilter.to)) {
+            return `${this.$helpers.formatMoney(priceFilter.from)} And Above`;
+        }
+        return `${this.$helpers.formatMoney(
+            priceFilter.from,
+        )} - ${this.$helpers.formatMoney(priceFilter.to)}`;
+    }
+
     countApply = 0;
     showFilters = ['category', 'price', 'color'];
-    handleSelectCategory(obj: any) {
-        if (!obj.active) this.countApply++;
-        productModule.updateFilterCategory({ ...obj, active: true });
+    handleSelectCategory(obj: IFilterCategory) {
+        if (obj.status === 'not-active') {
+            this.countApply++;
+            productModule.updateFilterCategory({ ...obj, status: 'pre-active' });
+        }
     }
 
-    handleSelectColor(obj: any) {
-        if (!obj.active) this.countApply++;
-        productModule.updateFilterColor({ ...obj, active: true });
+    handleSelectColor(obj: IFilterColor) {
+        if (obj.status === 'not-active') {
+            this.countApply++;
+            productModule.updateFilterColor({ ...obj, status: 'pre-active' });
+        }
     }
 
-    handleSelectPrice(obj: any) {
-        if (!obj.active) this.countApply++;
-        productModule.updateFilterPrice({ ...obj, active: true });
+    handleSelectPrice(obj: IFilterPrice) {
+        if (obj.status === 'not-active') {
+            this.countApply++;
+            productModule.updateFilterPrice({ ...obj, status: 'pre-active' });
+        }
     }
 
     handleApplyFilter() {
-        debugger;
         productModule.updateProductListShow();
+        this.countApply = 0;
     }
 }
 </script>
@@ -264,16 +281,16 @@ export default class ProductFilter extends Vue {
     }
 
     .pf-wrapper__item-color {
-        &[data-active='true'] {
+        &[data-status='pre-active'] {
         }
         display: flex;
     }
 
-    .pf-wrapper__item__category[data-active='true'] {
+    .pf-wrapper__item__category[data-status='pre-active'] {
         background: #fff;
     }
 
-    .pf-wrapper__item__price[data-active='true'] {
+    .pf-wrapper__item__price[data-status='pre-active'] {
         background: #fff;
     }
 }
