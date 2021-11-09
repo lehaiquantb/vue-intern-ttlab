@@ -85,6 +85,19 @@
                             <product-card :product="product"></product-card>
                         </el-col>
                     </el-row>
+
+                    <div class="super-center pagination-wrap">
+                        <el-pagination
+                            :pageSize="pagination.pageSize"
+                            :currentPage="pagination.currentPage"
+                            @size-change="changePageSize"
+                            @current-change="changeCurrentPage"
+                            :pager-count="10"
+                            layout="prev, pager, next, slot"
+                            :total="pagination.total"
+                        >
+                        </el-pagination>
+                    </div>
                 </el-col>
             </el-row>
         </div>
@@ -106,6 +119,18 @@ export default class ProductList extends Vue {
     $helpers!: Record<string, any>;
     get productListShow(): Array<IProduct> {
         return productModule.productListShow;
+    }
+
+    get pagination() {
+        return productModule.pagination;
+    }
+
+    changePageSize(pageSize: number) {
+        productModule.updatePagination({ pageSize });
+    }
+
+    changeCurrentPage(currentPage: number) {
+        productModule.updatePagination({ currentPage });
     }
 
     formatPriceFilter(priceFilter: IFilterPrice): string {
@@ -250,6 +275,25 @@ export default class ProductList extends Vue {
         align-items: center;
 
         color: #000000;
+    }
+
+    .pagination-wrap {
+        margin-top: 20px;
+        .number {
+            border-radius: 50px;
+            min-width: 30px;
+            margin: 0px 2px;
+            border: 2px solid #a2a6b0;
+            color: #a2a6b0;
+            box-sizing: border-box;
+            vertical-align: unset;
+        }
+
+        .number.active {
+            background: #f5f7ff;
+            color: #000;
+            border: none;
+        }
     }
 }
 </style>

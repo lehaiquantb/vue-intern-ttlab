@@ -363,9 +363,15 @@ class ProductModule extends VuexModule {
         pageSize: 10,
         defaultPageSize: 10,
         total: 99,
+        currentPage: 1,
     };
 
     productListShow: Array<IProduct> = this.productList;
+
+    @Mutation
+    updatePagination(changeObject: any) {
+        this.pagination = { ...this.pagination, ...changeObject };
+    }
 
     @Mutation
     updateFilterCategory(changeObject: any) {
