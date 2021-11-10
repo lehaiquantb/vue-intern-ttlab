@@ -15,6 +15,7 @@ export interface IColor extends IIdentification {
 }
 
 export interface IProduct extends IIdentification {
+    name: string;
     thumbnail: string;
     code: string;
     description: string;
@@ -62,4 +63,10 @@ export interface IPagination {
     defaultPageSize: number;
     total: number;
     currentPage: number;
+}
+
+export interface IActionDropdown {
+    name: string;
+    key: number;
+    value?: string | number;
 }

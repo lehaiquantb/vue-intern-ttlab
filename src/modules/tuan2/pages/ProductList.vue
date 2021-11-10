@@ -30,16 +30,19 @@
                                 <div class="pl_action-sort">
                                     <dropdown
                                         style="font-size: 13px"
-                                        :title="'Position'"
-                                        :actions="['a', 'b']"
+                                        :actions="DEFAULT_SORT_OPTION_LIST"
                                         :prefix="'Sort'"
+                                        :selected-action="selectedActionSort"
+                                        v-model:selectedAction="selectedActionSort"
                                     ></dropdown>
                                 </div>
                                 <div class="pl_action-perpage">
                                     <dropdown
                                         style="font-size: 13px"
-                                        :title="'35 per page'"
                                         :prefix="'Show'"
+                                        :actions="DEFAULT_SHOW_OPTION_LIST"
+                                        :selected-action="selectedActionShow"
+                                        v-model:selectedAction="selectedActionShow"
                                     ></dropdown>
                                 </div>
                                 <div class="pl_action-list-icon">
@@ -111,12 +114,33 @@ import ProductFilter from '@/modules/tuan2/components/ProductFilter.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import FilterTag from '@/components/FilterTag.vue';
 import { productModule } from '../store';
-import { IFilterPrice, IProduct } from '../types';
+import { IActionDropdown, IFilterPrice, IProduct } from '../types';
+import { DEFAULT_SHOW_OPTION_LIST, DEFAULT_SORT_OPTION_LIST } from '../contants';
+
 @Options({
     components: { ProductCard, ProductFilter, Dropdown, FilterTag },
 })
 export default class ProductList extends Vue {
+    DEFAULT_SORT_OPTION_LIST = DEFAULT_SORT_OPTION_LIST;
+    DEFAULT_SHOW_OPTION_LIST = DEFAULT_SHOW_OPTION_LIST;
+
     $helpers!: Record<string, any>;
+    get selectedActionSort(): IActionDropdown {
+        return productModule.selectedAction.sort;
+    }
+
+    set selectedActionSort(v: IActionDropdown) {
+        productModule.updateSelectedAction({ changeObject: v, key: 'sort' });
+    }
+
+    get selectedActionShow(): IActionDropdown {
+        return productModule.selectedAction.show;
+    }
+
+    set selectedActionShow(v: IActionDropdown) {
+        productModule.updateSelectedAction({ changeObject: v, key: 'show' });
+    }
+
     get productListShow(): Array<IProduct> {
         return productModule.productListShow;
     }

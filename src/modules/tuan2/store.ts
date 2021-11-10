@@ -1,4 +1,5 @@
-import { ICategory, IProduct, IFilter, IPagination } from './types';
+import { DEFAULT_SORT_OPTION_LIST, DEFAULT_SHOW_OPTION_LIST } from './contants';
+import { ICategory, IProduct, IFilter, IPagination, IActionDropdown } from './types';
 import { getModule, VuexModule, Mutation, Module, Action } from 'vuex-module-decorators';
 import store from '@/store';
 
@@ -71,7 +72,7 @@ class ProductModule extends VuexModule {
                 featured: null,
                 ioPort: null,
             },
-            price: 499,
+            price: 399,
             imageList: [
                 {
                     id: 1,
@@ -123,7 +124,7 @@ class ProductModule extends VuexModule {
                 featured: null,
                 ioPort: null,
             },
-            price: 499,
+            price: 599,
             imageList: [
                 {
                     id: 1,
@@ -174,7 +175,7 @@ class ProductModule extends VuexModule {
                 featured: null,
                 ioPort: null,
             },
-            price: 499,
+            price: 99,
             imageList: [
                 {
                     id: 1,
@@ -225,7 +226,7 @@ class ProductModule extends VuexModule {
                 featured: null,
                 ioPort: null,
             },
-            price: 499,
+            price: 999,
             imageList: [
                 {
                     id: 1,
@@ -366,7 +367,27 @@ class ProductModule extends VuexModule {
         currentPage: 1,
     };
 
+    selectedAction: {
+        sort: IActionDropdown;
+        show: IActionDropdown;
+        [index: string]: IActionDropdown;
+    } = {
+        sort: DEFAULT_SORT_OPTION_LIST[0],
+        show: DEFAULT_SHOW_OPTION_LIST[0],
+    };
+
     productListShow: Array<IProduct> = this.productList;
+
+    @Mutation
+    UPDATE_SELECTED_ACTION(obj: { changeObject: IActionDropdown; key: string }) {
+        this.selectedAction[obj.key] = { ...obj.changeObject };
+    }
+
+    @Action
+    updateSelectedAction(obj: { changeObject: IActionDropdown; key: string }) {
+        this.UPDATE_SELECTED_ACTION({ changeObject: obj.changeObject, key: obj.key });
+        this.updateProductListShow();
+    }
 
     @Mutation
     updateFilterCategory(changeObject: any) {
@@ -469,12 +490,35 @@ class ProductModule extends VuexModule {
 
         // paging
         this.UPDATE_PAGINATION({ total: productListShowTemp.length });
+        this.UPDATE_PAGINATION({ pageSize: this.selectedAction.show.value });
         const offset = (this.pagination.currentPage - 1) * this.pagination.pageSize;
         productListShowTemp = productListShowTemp.slice(
             offset,
             offset + this.pagination.pageSize,
         );
+
+        // sort
+        switch (this.selectedAction.sort.key) {
+            case 1:
+                productListShowTemp = productListShowTemp.sort((product1, product2) =>
+                    product1.code.toLowerCase() >= product2.code.toLowerCase() ? 1 : -1,
+                );
+                break;
+            case 2:
+                productListShowTemp = productListShowTemp.sort(
+                    (product1, product2) => product1.price - product2.price,
+                );
+                break;
+            case 3:
+                productListShowTemp = productListShowTemp.sort((product1, product2) =>
+                    product1.name.toLowerCase() >= product2.name.toLowerCase() ? 1 : -1,
+                );
+                break;
+            default:
+                break;
+        }
         // search
+
         this.UPDATE_PRODUCT_LIST_SHOW(productListShowTemp);
     }
 
