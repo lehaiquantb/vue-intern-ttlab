@@ -95,7 +95,7 @@
                             <router-link to="/tuan1/bai1_2">Bài 1.2</router-link>
                         </div>
                         <div>
-                            <router-link to="/bai2">Bài 2</router-link>
+                            <router-link to="/tuan2/product-list">Bài 2</router-link>
                         </div>
                     </div>
                     <!--end row-->
