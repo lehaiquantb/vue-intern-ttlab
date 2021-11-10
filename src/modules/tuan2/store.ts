@@ -533,6 +533,10 @@ class ProductModule extends VuexModule {
         this.UPDATE_PAGINATION(changeObject);
         this.updateProductListShow();
     }
+
+    get projectDetailById() {
+        return (id: string | number) => this.productList.find((item) => item.id === id);
+    }
     // @Action
     // incrementAfterTime(payload: number) {}
 
