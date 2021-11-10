@@ -5,7 +5,8 @@
             :min="min"
             :max="max"
             :value="value"
-            @input="$emit('update:modelValue', parseFloat($event.target.value))"
+            @input="onChange"
+            @blur="onBlur"
         />
         <div class="input-number-custom__icon">
             <div class="super-center" @click="increaseValue">
@@ -26,7 +27,7 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({
     props: {
-        min: { type: Number, default: 0 },
+        min: { type: Number, default: -Infinity },
         max: { type: Number, default: Infinity },
         value: { type: Number, default: 0 },
     },
@@ -35,6 +36,23 @@ export default class InputNumber extends Vue {
     min!: number;
     max!: number;
     value!: number;
+    onChange($event: any): any {
+        const inputValue = parseFloat((<HTMLInputElement>$event.target).value);
+        if (isNaN(inputValue)) {
+            return;
+        }
+        let value = inputValue;
+        if (this.min > inputValue) value = this.min;
+        else if (this.max < inputValue) value = this.max;
+
+        this.$emit('update:modelValue', value);
+    }
+
+    onBlur($event: any) {
+        const inputValue = parseFloat((<HTMLInputElement>$event.target).value);
+        if (isNaN(inputValue)) this.$emit('update:modelValue', this.min.toString());
+    }
+
     increaseValue() {
         if (this.value < this.max) {
             this.$emit('update:modelValue', this.value + 1);
