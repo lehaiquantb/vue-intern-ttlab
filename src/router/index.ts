@@ -10,6 +10,7 @@ forEach(routesModules, (module) => {
     routes = concat(routes, (module as { default: Array<RouteRecordRaw> }).default);
 });
 console.log(routes);
+console.log(process.env.BASE_URL);
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
