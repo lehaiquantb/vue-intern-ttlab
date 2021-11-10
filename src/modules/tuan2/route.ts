@@ -32,7 +32,7 @@ export default [
                     onlyWhenLoggedOut: true,
                     public: true,
                 },
-                redirect: { name: 'About' },
+                // redirect: { name: 'About' },
                 children: [
                     {
                         path: 'about-product',
