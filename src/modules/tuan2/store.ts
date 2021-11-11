@@ -1,16 +1,27 @@
 import { DEFAULT_SORT_OPTION_LIST, DEFAULT_SHOW_OPTION_LIST } from './contants';
-import { ICategory, IProduct, IFilter, IPagination, IActionDropdown } from './types';
+import {
+    ICategory,
+    IProduct,
+    IFilter,
+    IPagination,
+    IActionDropdown,
+    ICart,
+    ICartItem,
+    ICartSummary,
+} from './types';
 import { getModule, VuexModule, Mutation, Module, Action } from 'vuex-module-decorators';
 import store from '@/store';
+import { notifySuccess } from '@/utils/util';
 
 @Module({ dynamic: true, namespaced: true, store, name: 'Product' })
 class ProductModule extends VuexModule {
     count = 0;
+    searchKeyword = '';
     categoryList: Array<ICategory> = [];
     productList: Array<IProduct> = [
         {
             id: 1,
-            name: 'MSI MPG Trident 3',
+            name: 'MSI MPG Trident 1',
             thumbnail: 'p1.png',
             code: 'SKU D5515AI',
             description:
@@ -58,11 +69,12 @@ class ProductModule extends VuexModule {
                     hex: 'blue',
                 },
             ],
+            quantityInStock: 1,
         },
 
         {
             id: 2,
-            name: 'MSI MPG Trident 3',
+            name: 'MSI MPG Trident 2',
             thumbnail: 'p2.png',
             code: 'SKU D5515AI',
             description:
@@ -110,11 +122,12 @@ class ProductModule extends VuexModule {
                     hex: 'blue',
                 },
             ],
+            quantityInStock: 2,
         },
 
         {
             id: 3,
-            name: 'MSI MPG Trident 3',
+            name: 'MSI MPG Trident 4',
             thumbnail: 'p3.png',
             code: 'SKU D5515AI',
             description:
@@ -162,6 +175,7 @@ class ProductModule extends VuexModule {
                     hex: 'blue',
                 },
             ],
+            quantityInStock: 3,
         },
         {
             id: 4,
@@ -213,10 +227,11 @@ class ProductModule extends VuexModule {
                     hex: 'blue',
                 },
             ],
+            quantityInStock: 4,
         },
         {
             id: 5,
-            name: 'MSI MPG Trident 3',
+            name: 'MSI MPG Trident 5',
             thumbnail: 'p4.png',
             code: 'SKU D5515AI',
             description:
@@ -264,6 +279,7 @@ class ProductModule extends VuexModule {
                     hex: 'blue',
                 },
             ],
+            quantityInStock: 5,
         },
     ];
 
@@ -378,6 +394,25 @@ class ProductModule extends VuexModule {
 
     productListShow: Array<IProduct> = this.productList;
 
+    cart: ICart = {
+        cartItemList: [
+            {
+                productId: 2,
+                quantity: 1,
+            },
+        ],
+        summary: {
+            country: '',
+            province: '',
+            shippingMethod: {
+                id: 'COD',
+                cost: 21,
+            },
+            gst: 10,
+            discountCode: '',
+        },
+    };
+
     @Mutation
     UPDATE_SELECTED_ACTION(obj: { changeObject: IActionDropdown; key: string }) {
         this.selectedAction[obj.key] = { ...obj.changeObject };
@@ -488,15 +523,6 @@ class ProductModule extends VuexModule {
             return true;
         });
 
-        // paging
-        this.UPDATE_PAGINATION({ total: productListShowTemp.length });
-        this.UPDATE_PAGINATION({ pageSize: this.selectedAction.show.value });
-        const offset = (this.pagination.currentPage - 1) * this.pagination.pageSize;
-        productListShowTemp = productListShowTemp.slice(
-            offset,
-            offset + this.pagination.pageSize,
-        );
-
         // sort
         switch (this.selectedAction.sort.key) {
             case 1:
@@ -518,7 +544,18 @@ class ProductModule extends VuexModule {
                 break;
         }
         // search
+        productListShowTemp = productListShowTemp.filter(
+            (item) => item.name.search(new RegExp(this.searchKeyword, 'i')) !== -1,
+        );
 
+        // paging
+        this.UPDATE_PAGINATION({ total: productListShowTemp.length });
+        this.UPDATE_PAGINATION({ pageSize: this.selectedAction.show.value });
+        const offset = (this.pagination.currentPage - 1) * this.pagination.pageSize;
+        productListShowTemp = productListShowTemp.slice(
+            offset,
+            offset + this.pagination.pageSize,
+        );
         this.UPDATE_PRODUCT_LIST_SHOW(productListShowTemp);
     }
 
@@ -534,14 +571,78 @@ class ProductModule extends VuexModule {
         this.updateProductListShow();
     }
 
+    @Mutation
+    UPDATE_SEARCH_KEYWORD(keyword: string) {
+        this.searchKeyword = keyword;
+    }
+
+    @Action
+    updateSearchKeyword(keyword: string) {
+        this.UPDATE_SEARCH_KEYWORD(keyword);
+    }
+
+    @Mutation
+    UPDATE_CART(cart: ICart) {
+        this.cart = cart;
+    }
+
+    @Action
+    clearCartItem() {
+        this.UPDATE_CART({ ...this.cart, cartItemList: [] });
+    }
+
+    @Action
+    addCartItem(productId: number | string) {
+        const tempCart = this.cart;
+        // const tempCart:ICart = JSON.parse(JSON.stringify(this.cart));
+        const checkCartItem = tempCart.cartItemList.find(
+            (item) => item.productId === productId,
+        );
+
+        const product = this.productList.find((item) => item.id === productId);
+
+        if (
+            checkCartItem &&
+            product &&
+            checkCartItem.quantity < product.quantityInStock
+        ) {
+            this.updateCartItem({ productId, quantity: checkCartItem.quantity + 1 });
+        } else {
+            this.updateCartItem({ productId, quantity: 1 });
+        }
+
+        notifySuccess('Thêm sản phẩm thành công');
+    }
+
+    @Action
+    updateCartItem(cartItem: ICartItem) {
+        const tempCart = this.cart;
+        // const tempCart:ICart = JSON.parse(JSON.stringify(this.cart));
+        const indexCartItem = tempCart.cartItemList.findIndex(
+            (item) => item.productId === cartItem.productId,
+        );
+
+        if (indexCartItem !== -1) {
+            if (cartItem.quantity === 0) {
+                tempCart.cartItemList.splice(indexCartItem, 1);
+            } else tempCart.cartItemList[indexCartItem] = cartItem;
+        } else {
+            tempCart.cartItemList.push({ quantity: 1, productId: cartItem.productId });
+        }
+
+        this.UPDATE_CART(tempCart);
+    }
+
+    @Action
+    updateCartSummary(cartSummary: ICartSummary) {
+        const tempCart = this.cart;
+        tempCart.summary = cartSummary;
+        this.UPDATE_CART(tempCart);
+    }
+
     get projectDetailById() {
         return (id: string | number) => this.productList.find((item) => item.id === id);
     }
-    // @Action
-    // incrementAfterTime(payload: number) {}
-
-    // @Action
-    // getUser() {}
 }
 
 export const productModule = getModule(ProductModule);

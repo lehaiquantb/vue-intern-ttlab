@@ -84,13 +84,31 @@
                 :xl="4"
             >
                 <div>
-                    <span class="super-center">
-                        <img src="@/assets/images/bai2/search-icon.svg" />
+                    <div class="product_header-action__item">
+                        <el-input
+                            v-model="searchKeyword"
+                            placeholder="Search something"
+                            @keydown.enter="onSearch"
+                        >
+                            <template #prefix>
+                                <span class="super-center">
+                                    <img src="@/assets/images/bai2/search-icon.svg" />
+                                </span>
+                            </template>
+                        </el-input>
+                    </div>
+                    <span class="super-center product_header-action__item">
+                        <div
+                            class="product_header-action__cart__count"
+                            v-if="countCartItem > 0"
+                        >
+                            {{ countCartItem }}
+                        </div>
+                        <router-link :to="{ name: 'ShoppingCart' }">
+                            <img src="@/assets/images/bai2/cart-icon.svg"
+                        /></router-link>
                     </span>
-                    <span class="super-center">
-                        <img src="@/assets/images/bai2/cart-icon.svg" />
-                    </span>
-                    <span class="super-center">
+                    <span class="super-center product_header-action__item">
                         <img src="@/assets/images/bai2/avatar.png" />
                     </span>
                 </div>
@@ -101,13 +119,30 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-
+import { Search } from '@element-plus/icons';
+import { productModule } from '../store';
 @Options({
-    components: {},
+    components: { Search },
 })
 export default class Header extends Vue {
     activeIndex = '1';
+
+    get countCartItem() {
+        return productModule.cart.cartItemList.length;
+    }
+
     // handleSelect() {}
+    get searchKeyword(): string {
+        return productModule.searchKeyword;
+    }
+
+    set searchKeyword(keyword: string) {
+        productModule.updateSearchKeyword(keyword);
+    }
+
+    onSearch() {
+        productModule.updateProductListShow();
+    }
 }
 </script>
 
@@ -119,17 +154,37 @@ export default class Header extends Vue {
         }
     }
     &-action {
+        display: flex !important;
+        align-items: center;
         height: 92px !important;
 
         div {
-            height: 100% !important;
+            /* height: 100% !important; */
             display: flex;
             justify-content: flex-end;
             align-items: center;
         }
-        span {
+        &__item {
+            span {
+                height: 100%;
+                cursor: pointer;
+            }
+            position: relative;
             margin: 5px;
             height: 100% !important;
+        }
+
+        &__cart__count {
+            position: absolute;
+            right: -3px;
+            display: flex;
+            justify-content: center !important;
+            top: -6px;
+            background: red;
+            color: #fff;
+            width: 15px;
+            height: 15px;
+            border-radius: 100%;
         }
     }
     &-info {

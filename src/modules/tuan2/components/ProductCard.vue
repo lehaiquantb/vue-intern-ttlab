@@ -69,7 +69,7 @@
                         </span>
                     </div>
 
-                    <div class="product_card-btn-add-to-cart">
+                    <div class="product_card-btn-add-to-cart" @click.stop="addToCart">
                         <img src="@/assets/images/bai2/cart-icon.svg" />
                         <span>Add To Cart</span>
                     </div>
@@ -91,7 +91,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { IProduct } from '../types';
-
+import { productModule } from '../store';
 @Options({
     components: {},
     props: {
@@ -102,6 +102,10 @@ export default class ProductCard extends Vue {
     product!: IProduct;
     navigateProductDetail() {
         this.$router.push({ name: 'ProductDetail', params: { id: this.product.id } });
+    }
+
+    addToCart() {
+        productModule.addCartItem(this.product.id);
     }
 }
 </script>

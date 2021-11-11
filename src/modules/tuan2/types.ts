@@ -29,6 +29,7 @@ export interface IProduct extends IIdentification {
     price: number;
     rate: number;
     colorList: Array<IColor>;
+    quantityInStock: number;
 }
 
 export interface IFilterIndentity {
@@ -69,4 +70,21 @@ export interface IActionDropdown {
     name: string;
     key: number;
     value?: string | number;
+}
+
+export interface ICartItem {
+    productId: number | string;
+    quantity: number;
+}
+
+export interface ICartSummary {
+    country: string;
+    province: string;
+    shippingMethod: { id: 'COD'; cost: 21 } | { cost: 0; id: 'PICK_UP_AT_STORE' };
+    gst: number;
+    discountCode: string;
+}
+export interface ICart {
+    cartItemList: Array<ICartItem>;
+    summary: ICartSummary;
 }

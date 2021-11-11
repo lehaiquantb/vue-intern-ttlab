@@ -61,7 +61,7 @@
             </el-row>
         </div>
         <shopping-cart-item
-            v-for="(item, index) in cartList"
+            v-for="(item, index) in cartItemList"
             :key="index"
             :cartItem="item"
         ></shopping-cart-item>
@@ -75,7 +75,9 @@
                     :xl="11"
                     class="shopping-cart-detail__col shopping-cart-detail__action__left"
                 >
-                    <custom-button type="fourth">Continue Shopping</custom-button>
+                    <custom-button type="fourth" @click="continueShopping"
+                        >Continue Shopping</custom-button
+                    >
                     <custom-button type="third">Clear Shopping Cart</custom-button>
                 </el-col>
                 <el-col
@@ -97,49 +99,19 @@
 import { Options, Vue } from 'vue-class-component';
 import ShoppingCartItem from './ShoppingCartItem.vue';
 import CustomButton from '@/components/CustomButton.vue';
+import { ICartItem } from '../../types';
+import { productModule } from '../../store';
 @Options({
     components: { ShoppingCartItem, CustomButton },
 })
 export default class ShoppingCartDetail extends Vue {
-    cartList = [
-        {
-            product: {
-                id: '1',
-                name: 'MSI MPG Trident 3',
-                thumbnail: 'p1.png',
-                code: 'SKU D5515AI',
-                description:
-                    'MSI CREATOR 17 A10SFS-240AU 17 UHD 4K HDR Thin Bezel Intel 10th Gen i7 10875H - RTX 2070 SUPER MAX Q - 16GB RAM - 1TB SSD NVME - Windows 10 PRO Laptop',
-                detail: {
-                    cpu: null,
-                    featured: null,
-                    ioPort: null,
-                    GPU: 'a',
-                },
-                imageList: [
-                    {
-                        url: 'p1.png',
-                        type: 'png',
-                    },
-                    {
-                        url: 'p2.png',
-                        type: 'png',
-                    },
-                    {
-                        url: 'p3.png',
-                        type: 'png',
-                    },
-                    {
-                        url: 'p4.png',
-                        type: 'png',
-                    },
-                ],
-                price: '499',
-                rate: 4,
-            },
-            quantity: 1,
-        },
-    ];
+    get cartItemList(): Array<ICartItem> {
+        return productModule.cart.cartItemList;
+    }
+
+    continueShopping() {
+        this.$router.push({ name: 'ProductList' });
+    }
 }
 </script>
 
