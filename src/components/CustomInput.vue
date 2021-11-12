@@ -48,11 +48,16 @@
                 <div class="input-custom__label">{{ option.label }}</div>
                 <div class="input-custom__inner" :data-type="type">
                     <div>
-                        <div class="input-custom__checkbox" @click="customValue = option">
+                        <div
+                            class="input-custom__checkbox"
+                            @click="customValue = option.value"
+                        >
                             <div
                                 :style="{
                                     backgroundColor:
-                                        customValue?.id === option?.id ? '#0156FF' : '',
+                                        customValue?.id === option?.value?.id
+                                            ? '#0156FF'
+                                            : '',
                                 }"
                             ></div>
                         </div>
@@ -78,7 +83,7 @@ type TypeOption = { value: string; label: string };
             type: Object as () => TypeInput,
             default: 'text',
         },
-        value: { type: Object as () => any, default: null },
+        modelValue: { type: Object as () => any, default: null },
         checkboxInfo: { type: String, default: '' },
         disabled: { type: Boolean, default: false },
     },
@@ -86,9 +91,10 @@ type TypeOption = { value: string; label: string };
 export default class CustomInput extends Vue {
     type!: string;
     options!: Array<TypeOption>;
-    value!: any;
+    modelValue!: any;
+
     get customValue(): any {
-        return this.value;
+        return this.modelValue;
     }
 
     set customValue(v) {
@@ -96,19 +102,20 @@ export default class CustomInput extends Vue {
     }
 
     created() {
-        switch (this.type) {
-            case 'select':
-                this.customValue = this.options[0]?.value;
-                break;
-            case 'checkbox':
-                this.customValue = false;
-                break;
-            case 'radio':
-                this.customValue = this.options[0]?.value;
-                break;
-            default:
-                break;
-        }
+        // this.customValue = this.modelValue;
+        // switch (this.type) {
+        //     case 'select':
+        //         this.customValue = this.options[0]?.value;
+        //         break;
+        //     case 'checkbox':
+        //         this.customValue = false;
+        //         break;
+        //     case 'radio':
+        //         this.customValue = this.options[0]?.value;
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 }
 </script>

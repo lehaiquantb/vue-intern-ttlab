@@ -14,20 +14,24 @@
                         class="shopping-cart-summary__shipping__item"
                         :options="[
                             {
-                                value: 'Option1',
-                                label: 'Option1',
+                                value: 'VN',
+                                label: 'Viet Nam',
                             },
                             {
-                                value: 'Option2',
-                                label: 'Option2',
+                                value: 'US',
+                                label: 'America',
+                            },
+                            {
+                                value: 'TL',
+                                label: 'ThaiLand',
                             },
                         ]"
+                        v-model="summary.country"
                     ></custom-input>
 
                     <custom-input
                         label="State/Province"
                         type="text"
-                        :value="summary.province"
                         v-model="summary.province"
                         class="shopping-cart-summary__shipping__item"
                     ></custom-input>
@@ -35,6 +39,7 @@
                         label="Zip/Postal Code"
                         type="text"
                         class="shopping-cart-summary__shipping__item"
+                        v-model="summary.postalCode"
                     ></custom-input>
 
                     <custom-input
@@ -58,6 +63,7 @@
                                     '1234 Street Adress City Address, 1234 $0.00',
                             },
                         ]"
+                        v-model="summary.shippingMethod"
                         class="shopping-cart-summary__shipping__item"
                     >
                     </custom-input>
@@ -71,31 +77,43 @@
                         label="Enter discount code"
                         type="text"
                         placeholder="Enter Discount code"
+                        v-model="summary.discountCode"
                     ></custom-input>
                 </collapse>
                 <div class="shopping-cart-summary__divide"></div>
                 <div class="shopping-cart-summary__order__info">
                     <div class="shopping-cart-summary__order__info__price">
-                        <span>Subtotal</span><span>$13,047.00</span>
+                        <span>Subtotal</span><span>{{ subtotal }}</span>
                     </div>
                     <div class="shopping-cart-summary__order__info__price__wrap">
                         <div class="shopping-cart-summary__order__info__price">
-                            <span>Shipping</span><span>$13,047.00</span>
+                            <span>Shipping</span
+                            ><span>{{
+                                $helpers.formatMoney(summary.shippingMethod.cost)
+                            }}</span>
                         </div>
-                        <div class="shopping-cart-summary__order__info__note">
+                        <div
+                            class="shopping-cart-summary__order__info__note"
+                            v-if="summary.shippingMethod.id === 'COD'"
+                        >
                             (Standard Rate - Price may vary depending on the
                             item/destination. TECS Staff will contact you.)
                         </div>
                     </div>
                     <div class="shopping-cart-summary__order__info__price">
-                        <span>Tax</span><span>$13,047.00</span>
+                        <span>Tax</span><span>{{ $helpers.formatMoney(tax) }}</span>
                     </div>
                     <div class="shopping-cart-summary__order__info__price">
-                        <span>GST (10%)</span><span>$13,047.00</span>
+                        <span>GST (10%)</span
+                        ><span>{{
+                            $helpers.formatMoney((subtotal * summary.gst) / 100)
+                        }}</span>
                     </div>
                     <div class="shopping-cart-summary__order__info__price">
                         <span>Order Total</span
-                        ><span class="shopping-cart-summary__total">$13,047.00</span>
+                        ><span class="shopping-cart-summary__total">{{
+                            $helpers.formatMoney(orderTotal)
+                        }}</span>
                     </div>
                 </div>
                 <div>
@@ -114,22 +132,46 @@ import Collapse from '@/components/Collapse.vue';
 import CustomButton from '@/components/CustomButton.vue';
 import CustomInput from '@/components/CustomInput.vue';
 import { ICartSummary } from '../../types';
+import { productModule } from '../../store';
 
 @Options({
     components: { Collapse, CustomButton, CustomInput },
 })
 export default class ShoppingCartSummary extends Vue {
     summary: ICartSummary = {
-        country: '',
-        province: '',
-        postalCode: '',
+        country: 'VN',
+        province: 'Hanoi',
+        postalCode: '1234',
         shippingMethod: {
             id: 'COD',
             cost: 21,
         },
         gst: 10,
-        discountCode: '',
+        discountCode: 'DICOUNT10',
     };
+
+    subtotal = 0;
+    tax = 0;
+
+    orderTotal = 0;
+
+    updateShoppingCart() {
+        const cartItemList = productModule.cart.cartItemList;
+        let total = 0;
+        for (const cartItem of cartItemList) {
+            const product = productModule.productList.find(
+                (item) => item.id === cartItem.productId,
+            );
+            const price = product?.price ?? 0;
+            total += price * cartItem.quantity;
+            this.subtotal = total;
+        }
+
+        total += this.summary.shippingMethod.cost;
+        total += this.tax;
+        total += (this.subtotal * this.summary.gst) / 100;
+        this.orderTotal = total;
+    }
 }
 </script>
 

@@ -90,7 +90,9 @@
                     :xl="13"
                     class="shopping-cart-detail__col shopping-cart-detail__action__right"
                 >
-                    <custom-button type="third">Update Shopping Cart</custom-button>
+                    <custom-button type="third" @click="$emit('updateShoppingCart')"
+                        >Update Shopping Cart</custom-button
+                    >
                 </el-col></el-row
             >
         </div>
@@ -117,7 +119,6 @@ export default class ShoppingCartDetail extends Vue {
     }
 
     clearShoppingCart() {
-        debugger;
         confirm({
             message: 'Bạn có chắc muốn xóa toàn bộ sản phẩm trong giỏ hàng',
             handleOk: () => {

@@ -12,10 +12,14 @@
         <div class="shopping-cart__content">
             <el-row>
                 <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16"
-                    ><shopping-cart-detail></shopping-cart-detail>
+                    ><shopping-cart-detail
+                        @update-shopping-cart="updateShoppingCart"
+                    ></shopping-cart-detail>
                 </el-col>
                 <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"
-                    ><shopping-cart-summary></shopping-cart-summary>
+                    ><shopping-cart-summary
+                        ref="shoppingCartSummary"
+                    ></shopping-cart-summary>
                 </el-col>
             </el-row>
         </div>
@@ -30,7 +34,11 @@ import ShoppingCartSummary from '../components/ShoppingCart/ShoppingCartSummary.
 @Options({
     components: { ShoppingCartDetail, ShoppingCartSummary },
 })
-export default class ShoppingCart extends Vue {}
+export default class ShoppingCart extends Vue {
+    updateShoppingCart() {
+        (this.$refs.shoppingCartSummary as any).updateShoppingCart();
+    }
+}
 </script>
 
 <style lang="scss" scoped>
