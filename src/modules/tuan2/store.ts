@@ -11,7 +11,7 @@ import {
 } from './types';
 import { getModule, VuexModule, Mutation, Module, Action } from 'vuex-module-decorators';
 import store from '@/store';
-import { notifySuccess } from '@/utils/util';
+import { notifyError, notifySuccess } from '@/utils/util';
 
 @Module({ dynamic: true, namespaced: true, store, name: 'Product' })
 class ProductModule extends VuexModule {
@@ -389,7 +389,7 @@ class ProductModule extends VuexModule {
         [index: string]: IActionDropdown;
     } = {
         sort: DEFAULT_SORT_OPTION_LIST[0],
-        show: DEFAULT_SHOW_OPTION_LIST[0],
+        show: DEFAULT_SHOW_OPTION_LIST[2],
     };
 
     productListShow: Array<IProduct> = this.productList;
@@ -404,6 +404,7 @@ class ProductModule extends VuexModule {
         summary: {
             country: '',
             province: '',
+            postalCode: '',
             shippingMethod: {
                 id: 'COD',
                 cost: 21,
@@ -589,29 +590,45 @@ class ProductModule extends VuexModule {
     @Action
     clearCartItem() {
         this.UPDATE_CART({ ...this.cart, cartItemList: [] });
+        notifySuccess('Đã xóa toàn bộ sản phẩm trong giỏ hàng');
     }
 
     @Action
-    addCartItem(productId: number | string) {
+    addCartItem(cartItem: { productId: number | string; quantity?: number }) {
         const tempCart = this.cart;
         // const tempCart:ICart = JSON.parse(JSON.stringify(this.cart));
         const checkCartItem = tempCart.cartItemList.find(
-            (item) => item.productId === productId,
+            (item) => item.productId === cartItem.productId,
         );
 
-        const product = this.productList.find((item) => item.id === productId);
+        const q = cartItem?.quantity ?? 1;
 
+        const product = this.productList.find((item) => item.id === cartItem.productId);
         if (
             checkCartItem &&
             product &&
-            checkCartItem.quantity < product.quantityInStock
+            checkCartItem.quantity + q <= product.quantityInStock
         ) {
-            this.updateCartItem({ productId, quantity: checkCartItem.quantity + 1 });
-        } else {
-            this.updateCartItem({ productId, quantity: 1 });
+            this.updateCartItem({
+                productId: cartItem.productId,
+                quantity: checkCartItem.quantity + q,
+            });
+            notifySuccess('Thêm sản phẩm thành công');
+            return;
+        } else if (
+            checkCartItem === undefined &&
+            product &&
+            q <= product?.quantityInStock
+        ) {
+            this.updateCartItem({
+                productId: cartItem.productId,
+                quantity: q,
+            });
+            notifySuccess('Thêm sản phẩm thành công');
+            return;
         }
 
-        notifySuccess('Thêm sản phẩm thành công');
+        notifyError('Không thể thêm sản phẩm vào giỏ hàng');
     }
 
     @Action
@@ -627,7 +644,10 @@ class ProductModule extends VuexModule {
                 tempCart.cartItemList.splice(indexCartItem, 1);
             } else tempCart.cartItemList[indexCartItem] = cartItem;
         } else {
-            tempCart.cartItemList.push({ quantity: 1, productId: cartItem.productId });
+            tempCart.cartItemList.push({
+                quantity: cartItem.quantity,
+                productId: cartItem.productId,
+            });
         }
 
         this.UPDATE_CART(tempCart);

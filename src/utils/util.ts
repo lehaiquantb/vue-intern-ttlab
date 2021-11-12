@@ -1,5 +1,6 @@
 import { NumberFormatOptions } from '@intlify/core-base';
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessageBox } from 'element-plus';
+
 export function isJson(str: string): boolean {
     try {
         JSON.parse(str);
@@ -24,7 +25,7 @@ export function formatMoney(n: number): string {
     return '$' + f1.split('.')[0] + '.' + decimal.substring(0, 2);
 }
 
-export function notifySuccess(message = '', title = 'Success') {
+export function notifySuccess(message = '', title = 'Success'): void {
     ElNotification({
         title,
         message,
@@ -32,7 +33,7 @@ export function notifySuccess(message = '', title = 'Success') {
     });
 }
 
-export function notifyError(message = '', title = 'Error') {
+export function notifyError(message = '', title = 'Error'): void {
     ElNotification({
         title,
         message,
@@ -40,7 +41,7 @@ export function notifyError(message = '', title = 'Error') {
     });
 }
 
-export function notifyWarning(message = '', title = 'Warning') {
+export function notifyWarning(message = '', title = 'Warning'): void {
     ElNotification({
         title,
         message,
@@ -48,10 +49,32 @@ export function notifyWarning(message = '', title = 'Warning') {
     });
 }
 
-export function notifyInfo(message = '', title = 'Info') {
+export function notifyInfo(message = '', title = 'Info'): void {
     ElNotification({
         title,
         message,
         type: 'info',
     });
+}
+
+export function confirm({
+    handleOk,
+    handleCancel,
+    message,
+}: {
+    handleOk: () => void;
+    handleCancel?: () => void;
+    message: string;
+}) {
+    ElMessageBox.confirm(message, 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+    })
+        .then(() => {
+            handleOk();
+        })
+        .catch(() => {
+            handleCancel && handleCancel();
+        });
 }

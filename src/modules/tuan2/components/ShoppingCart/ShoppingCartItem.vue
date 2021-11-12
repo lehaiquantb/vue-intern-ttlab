@@ -88,6 +88,7 @@ import { Options, Vue } from 'vue-class-component';
 import InputNumber from '@/components/InputNumber.vue';
 import { productModule } from '../../store';
 import { ICartItem, IProduct } from '../../types';
+import { confirm } from '@/utils/util';
 @Options({
     components: { InputNumber },
     props: {
@@ -115,7 +116,15 @@ export default class ShoppingCartItem extends Vue {
     }
 
     deleteCartItem() {
-        productModule.updateCartItem({ productId: this.cartItem.productId, quantity: 0 });
+        confirm({
+            message: 'Bạn có chắc muốn xóa sản phẩm này trong giỏ hàng',
+            handleOk: () => {
+                productModule.updateCartItem({
+                    productId: this.cartItem.productId,
+                    quantity: 0,
+                });
+            },
+        });
     }
 
     // created(){

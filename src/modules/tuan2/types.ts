@@ -83,6 +83,7 @@ export interface ICartSummary {
     shippingMethod: { id: 'COD'; cost: 21 } | { cost: 0; id: 'PICK_UP_AT_STORE' };
     gst: number;
     discountCode: string;
+    postalCode: string;
 }
 export interface ICart {
     cartItemList: Array<ICartItem>;

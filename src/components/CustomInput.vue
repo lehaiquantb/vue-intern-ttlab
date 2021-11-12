@@ -1,33 +1,64 @@
 <template>
-    <div class="input-custom" :style="{ width: width }" :data-type="type">
-        <div class="input-custom__label">{{ label }}</div>
-        <div class="input-custom__inner" :data-type="type">
-            <input
-                type="text"
-                v-if="type === 'text'"
-                :placeholder="placeholder"
-                v-model="value"
-            />
-            <el-select
-                v-if="type === 'select'"
-                v-model="value"
-                :placeholder="placeholder"
-            >
-                <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+    <div class="input-custom-container" :style="{ width: width }">
+        <div class="input-custom" :data-type="type" v-if="type !== 'radio'">
+            <div class="input-custom__label">{{ label }}</div>
+            <div class="input-custom__inner" :data-type="type">
+                <input
+                    type="text"
+                    v-if="type === 'text'"
+                    :placeholder="placeholder"
+                    v-model="customValue"
+                />
+                <el-select
+                    v-if="type === 'select'"
+                    v-model="customValue"
+                    :placeholder="placeholder"
                 >
-                </el-option>
-            </el-select>
-            <div v-if="type === 'checkbox'">
-                <div class="input-custom__checkbox" @click="value = !value">
+                    <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                </el-select>
+                <div v-if="type === 'checkbox'">
                     <div
-                        :style="{ backgroundColor: value === true ? '#0156FF' : '' }"
-                    ></div>
+                        class="input-custom__checkbox"
+                        @click="customValue = !customValue"
+                    >
+                        <div
+                            :style="{
+                                backgroundColor: customValue === true ? '#0156FF' : '',
+                            }"
+                        ></div>
+                    </div>
+                    <p>{{ checkboxInfo }}</p>
                 </div>
-                <p>{{ checkboxInfo }}</p>
+            </div>
+        </div>
+        <div v-if="type === 'radio'">
+            <div
+                class="input-custom"
+                :style="{ width: width }"
+                :data-type="type"
+                v-for="(option, index) in options"
+                :key="index"
+            >
+                <div class="input-custom__label">{{ option.label }}</div>
+                <div class="input-custom__inner" :data-type="type">
+                    <div>
+                        <div class="input-custom__checkbox" @click="customValue = option">
+                            <div
+                                :style="{
+                                    backgroundColor:
+                                        customValue?.id === option?.id ? '#0156FF' : '',
+                                }"
+                            ></div>
+                        </div>
+                        <p>{{ option.checkboxInfo }}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -37,7 +68,6 @@
 import { Options, Vue } from 'vue-class-component';
 type TypeInput = 'text' | 'select' | 'checkbox' | 'radio';
 type TypeOption = { value: string; label: string };
-
 @Options({
     props: {
         label: { type: String, default: '' },
@@ -48,6 +78,7 @@ type TypeOption = { value: string; label: string };
             type: Object as () => TypeInput,
             default: 'text',
         },
+        value: { type: Object as () => any, default: null },
         checkboxInfo: { type: String, default: '' },
         disabled: { type: Boolean, default: false },
     },
@@ -55,14 +86,25 @@ type TypeOption = { value: string; label: string };
 export default class CustomInput extends Vue {
     type!: string;
     options!: Array<TypeOption>;
-    value: any = null;
+    value!: any;
+    get customValue(): any {
+        return this.value;
+    }
+
+    set customValue(v) {
+        this.$emit('update:modelValue', v);
+    }
+
     created() {
         switch (this.type) {
             case 'select':
-                this.value = this.options[0]?.value;
+                this.customValue = this.options[0]?.value;
                 break;
             case 'checkbox':
-                this.value = false;
+                this.customValue = false;
+                break;
+            case 'radio':
+                this.customValue = this.options[0]?.value;
                 break;
             default:
                 break;
@@ -125,7 +167,8 @@ export default class CustomInput extends Vue {
             align-items: center;
         }
     }
-    &__inner[data-type='checkbox'] {
+    &__inner[data-type='checkbox'],
+    &__inner[data-type='radio'] {
         & > div {
             display: flex;
         }

@@ -27,21 +27,40 @@
                     <custom-input
                         label="State/Province"
                         type="text"
+                        :value="summary.province"
+                        v-model="summary.province"
                         class="shopping-cart-summary__shipping__item"
                     ></custom-input>
                     <custom-input
+                        label="Zip/Postal Code"
+                        type="text"
                         class="shopping-cart-summary__shipping__item"
-                        label="Standard Rate"
-                        type="checkbox"
-                        checkboxInfo="Standard Rate Price may vary depending on the item/destination. Shop
-                    Staff will contact you. $21.00"
                     ></custom-input>
+
                     <custom-input
+                        type="radio"
+                        :options="[
+                            {
+                                id: 'COD',
+                                value: {
+                                    id: 'COD',
+                                    cost: 21,
+                                },
+                                label: 'Standard Rate',
+                                checkboxInfo:
+                                    'Standard Rate Price may vary depending on the item/destination. Shop Staff will contact you. $21.00',
+                            },
+                            {
+                                id: 'PICK_UP_AT_STORE',
+                                value: { cost: 0, id: 'PICK_UP_AT_STORE' },
+                                label: 'Pickup from store',
+                                checkboxInfo:
+                                    '1234 Street Adress City Address, 1234 $0.00',
+                            },
+                        ]"
                         class="shopping-cart-summary__shipping__item"
-                        label="Pickup from store"
-                        type="checkbox"
-                        checkboxInfo="1234 Street Adress City Address, 1234 $0.00"
-                    ></custom-input>
+                    >
+                    </custom-input>
                 </collapse>
 
                 <collapse
@@ -94,10 +113,24 @@ import { Options, Vue } from 'vue-class-component';
 import Collapse from '@/components/Collapse.vue';
 import CustomButton from '@/components/CustomButton.vue';
 import CustomInput from '@/components/CustomInput.vue';
+import { ICartSummary } from '../../types';
+
 @Options({
     components: { Collapse, CustomButton, CustomInput },
 })
-export default class ShoppingCartSummary extends Vue {}
+export default class ShoppingCartSummary extends Vue {
+    summary: ICartSummary = {
+        country: '',
+        province: '',
+        postalCode: '',
+        shippingMethod: {
+            id: 'COD',
+            cost: 21,
+        },
+        gst: 10,
+        discountCode: '',
+    };
+}
 </script>
 
 <style lang="scss" scoped>
@@ -127,6 +160,7 @@ export default class ShoppingCartSummary extends Vue {}
     &__shipping {
         margin-top: 20px;
         &__item {
+            /* width: 100%; */
             margin: 10px 0px;
         }
     }

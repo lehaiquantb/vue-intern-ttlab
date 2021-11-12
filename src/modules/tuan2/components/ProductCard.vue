@@ -3,7 +3,7 @@
         <el-row :gutter="10">
             <div class="product_card-stock-status">
                 <img src="@/assets/images/bai2/tick-success-icon.svg" />
-                <span>in stock</span>
+                <span v-if="product.quantityInStock > 0">in stock</span>
             </div>
         </el-row>
         <el-row :gutter="10">
@@ -105,7 +105,7 @@ export default class ProductCard extends Vue {
     }
 
     addToCart() {
-        productModule.addCartItem(this.product.id);
+        productModule.addCartItem({ productId: this.product.id });
     }
 }
 </script>

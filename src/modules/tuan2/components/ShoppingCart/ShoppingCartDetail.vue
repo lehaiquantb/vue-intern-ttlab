@@ -78,7 +78,9 @@
                     <custom-button type="fourth" @click="continueShopping"
                         >Continue Shopping</custom-button
                     >
-                    <custom-button type="third">Clear Shopping Cart</custom-button>
+                    <custom-button type="third" @click="clearShoppingCart"
+                        >Clear Shopping Cart</custom-button
+                    >
                 </el-col>
                 <el-col
                     :xs="24"
@@ -101,6 +103,7 @@ import ShoppingCartItem from './ShoppingCartItem.vue';
 import CustomButton from '@/components/CustomButton.vue';
 import { ICartItem } from '../../types';
 import { productModule } from '../../store';
+import { confirm } from '@/utils/util';
 @Options({
     components: { ShoppingCartItem, CustomButton },
 })
@@ -111,6 +114,16 @@ export default class ShoppingCartDetail extends Vue {
 
     continueShopping() {
         this.$router.push({ name: 'ProductList' });
+    }
+
+    clearShoppingCart() {
+        debugger;
+        confirm({
+            message: 'Bạn có chắc muốn xóa toàn bộ sản phẩm trong giỏ hàng',
+            handleOk: () => {
+                productModule.clearCartItem();
+            },
+        });
     }
 }
 </script>

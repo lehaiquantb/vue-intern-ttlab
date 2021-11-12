@@ -303,11 +303,11 @@ export default class ProductFilter extends Vue {
     }
 
     .pf-wrapper__item__category[data-status='pre-active'] {
-        background: #fff;
+        color: #0156ff;
     }
 
     .pf-wrapper__item__price[data-status='pre-active'] {
-        background: #fff;
+        color: #0156ff;
     }
 }
 </style>

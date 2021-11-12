@@ -53,14 +53,19 @@
                         <div class="super-center">
                             <!-- <input type="number" /> -->
                             <input-number
-                                :min="0"
-                                :max="100"
+                                :min="1"
+                                :max="maxQuantity"
                                 :value="quantitySale"
                                 v-model="quantitySale"
                             />
                         </div>
                         <div class="super-center">
-                            <div class="product-detail-btn-add-to-cart">Add To Cart</div>
+                            <div
+                                class="product-detail-btn-add-to-cart"
+                                @click="addToCart"
+                            >
+                                Add To Cart
+                            </div>
                         </div>
                     </div>
                 </el-col>
@@ -170,6 +175,21 @@ import { IProduct } from '../types';
 export default class ProductDetail extends Vue {
     quantitySale = 1;
     product!: IProduct;
+
+    get maxQuantity(): number {
+        const checkCartItem = productModule.cart.cartItemList.find(
+            (item) => (item.productId = this.product.id),
+        );
+        if (checkCartItem) return this.product.quantityInStock - checkCartItem.quantity;
+        else return this.product.quantityInStock;
+    }
+
+    addToCart() {
+        productModule.addCartItem({
+            productId: this.product.id,
+            quantity: this.quantitySale,
+        });
+    }
 
     created() {
         const foundProduct = productModule.projectDetailById(

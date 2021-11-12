@@ -67,7 +67,11 @@
                                     :quantity="filterTag.quantity"
                                     @on-close="onClose(filterTag)"
                                 ></filter-tag>
-                                <div class="btn-clear-all" @click="onClearAllFilter">
+                                <div
+                                    class="btn-clear-all"
+                                    @click="onClearAllFilter"
+                                    v-if="filterTagList.length > 0"
+                                >
                                     Clear all
                                 </div>
                             </div>
