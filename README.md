@@ -1,3 +1,4 @@
+# Required Node version 14 or lower
 # base-project
 
 ## Project setup
